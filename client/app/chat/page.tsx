@@ -3,10 +3,10 @@
 import { LoadingSpinner } from "@/components/loading";
 import { Input } from "@/components/ui/input";
 import { useUserStore } from "@/store";
-import { LucideRocket } from "lucide-react";
+import { LucideBot, LucideRocket } from "lucide-react";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import DOMPurify from "dompurify";
-import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 type ChatMessage = { message: string; reply: string };
 type FormattedMessage = { role: "user" | "ai"; content: string };
@@ -30,7 +30,6 @@ const formatMessage = (text: string) => {
 
 const Page = () => {
   const { user } = useUserStore();
-  const router = useRouter();
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<FormattedMessage[]>([]);
   const [loading, setLoading] = useState(true);
@@ -73,6 +72,7 @@ const Page = () => {
 
   const sendMessage = async (e: FormEvent) => {
     e.preventDefault();
+    if (message.length === 0) return;
     setMessages((prev) => [...prev, { role: "user", content: message }]);
     setSending(true);
     try {
@@ -112,11 +112,9 @@ const Page = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  if (!user) router.push("/");
-
   return (
-    <main className="grid grid-rows-[1fr_auto] max-w-[1200px] mx-auto gap-4 px-8 pt-12 min-h-full h-[80dvh]">
-      <div className="border shadow rounded overflow-auto p-4">
+    <main className="grid grid-rows-[1fr_auto] max-w-[900px] mx-auto gap-8  pt-12 min-h-full h-[80dvh]">
+      <div className="border shadow  rounded overflow-auto p-4">
         {loading && (
           <div className="grid place-content-center h-full">
             <LoadingSpinner />
@@ -127,14 +125,14 @@ const Page = () => {
             return (
               <div key={i}>
                 {m.role === "user" && (
-                  <p className="p-4 border w-fit rounded bg-muted ml-auto">
+                  <p className="p-4  w-fit rounded-md bg-primary text-secondary ml-auto">
                     {m.content}
                   </p>
                 )}
                 {m.role === "ai" && (
                   <div className="flex items-start gap-4  p-4">
-                    <div className="bg-muted rounded-full border p-1.5">
-                      <LucideRocket />
+                    <div className=" rounded-md border p-2 ">
+                      <LucideBot className="w-8 h-8" />
                     </div>
                     <p
                       className="w-fit rounded  mr-auto"
@@ -154,19 +152,26 @@ const Page = () => {
         )}
         <div ref={messagesEndRef} />
       </div>
-      <div className="h-8">
-        <form onSubmit={sendMessage}>
+      <div>
+        <form
+          onSubmit={sendMessage}
+          className="relative"
+        >
           <Input
             type="text"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Type something..."
-            className="w-full h-auto"
+            className="w-full h-12"
           />
-          <input
-            className="sr-only"
+          <Button
+            disabled={message.length === 0}
             type="submit"
-          />
+            variant="default"
+            className="absolute right-2 top-1.5"
+          >
+            <LucideRocket />
+          </Button>
         </form>
       </div>
     </main>

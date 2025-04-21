@@ -8,15 +8,20 @@ import Link from "next/link";
 export default function Home() {
   const { user } = useUserStore();
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center h-full">
-        <h1 className="text-5xl font-bold">Chat app</h1>
+    <div className="grid items-center justify-items-center min-h-screen p-8  gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+      <main className="flex flex-col gap-[32px] items-center h-full">
+        <h1 className="text-5xl font-black">
+          Ask Anything. Get Answers Instantly.
+        </h1>
+        <h3>
+          Experience next-gen AI conversations—fast, accurate, and always
+          learning.
+        </h3>
         {!user && (
           <>
             <Link href={"/sign-up"}>
               <Button>Sign up</Button>
-            </Link>{" "}
-            to continue
+            </Link>
           </>
         )}
         {user && (
@@ -27,9 +32,6 @@ export default function Home() {
           </div>
         )}
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        footer
-      </footer>
     </div>
   );
 }
