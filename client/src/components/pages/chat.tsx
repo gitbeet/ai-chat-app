@@ -1,5 +1,3 @@
-"use client";
-
 import { LoadingSpinner } from "@/components/loading";
 import { Input } from "@/components/ui/input";
 import { useUserStore } from "@/store";
@@ -42,7 +40,7 @@ const Page = () => {
     console.log(userId);
     try {
       const responseJSON = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/get-messages`,
+        `${import.meta.env.VITE_API_URL}/get-messages`,
         {
           method: "POST",
           headers: {
@@ -76,19 +74,16 @@ const Page = () => {
     setMessages((prev) => [...prev, { role: "user", content: message }]);
     setSending(true);
     try {
-      const responseJSON = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/chat`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            message,
-            userId,
-          }),
-        }
-      );
+      const responseJSON = await fetch(`${import.meta.env.VITE_API_URL}/chat`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message,
+          userId,
+        }),
+      });
       const response = await responseJSON.json();
       setMessages((prev) => [...prev, { role: "ai", content: response.reply }]);
       setMessage("");
@@ -125,13 +120,13 @@ const Page = () => {
             return (
               <div key={i}>
                 {m.role === "user" && (
-                  <p className="p-4  w-fit rounded-md bg-primary text-secondary ml-auto">
+                  <p className="p-4  w-fit rounded-md bg-muted shadow-md  ml-auto">
                     {m.content}
                   </p>
                 )}
                 {m.role === "ai" && (
                   <div className="flex items-start gap-4  p-4">
-                    <div className=" rounded-md border p-2 ">
+                    <div className=" rounded-md bg-muted shadow p-2 ">
                       <LucideBot className="w-8 h-8" />
                     </div>
                     <p

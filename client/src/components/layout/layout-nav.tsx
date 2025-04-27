@@ -1,26 +1,26 @@
-"use client";
-
-import { useUserStore } from "@/store";
-import Link from "next/link";
-import { Button } from "./ui/button";
-import { ModeToggle } from "./mode-toggle";
 import { LucideSprout } from "lucide-react";
+import { useUserStore } from "@/store";
+import { ModeToggle } from "../mode-toggle";
+import { Button } from "../ui/button";
+import { Link, useNavigate } from "react-router";
 
-const Nav = () => {
+const LayoutNav = () => {
   const { user, setUser } = useUserStore();
+  const navigate = useNavigate();
 
   const fakeSignUp = () => setUser({ name: "John", email: "john@email.com" });
   const handleSignOut = async () => {
+    navigate("/");
     setUser(null);
     useUserStore.persist.clearStorage();
   };
   return (
     <nav className="px-4 py-2 max-w-[1200px] flex items-center justify-between mx-auto">
       <Link
-        href={"/"}
+        to={"/"}
         className="flex items-center"
       >
-        <LucideSprout />
+        <LucideSprout className="text-primary" />
         <span className="text-lg font-light relative top-0.5">sprout</span>
       </Link>
       <div className="flex gap-2 items-end">
@@ -44,4 +44,4 @@ const Nav = () => {
   );
 };
 
-export default Nav;
+export default LayoutNav;
