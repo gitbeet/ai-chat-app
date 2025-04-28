@@ -11,7 +11,6 @@ export const chats = pgTable("chats", {
 export const users = pgTable("users", {
   userId: text("user_id").primaryKey(),
   name: text("name").notNull(),
-  email: text("email").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -20,3 +19,10 @@ export type ChatInsert = typeof chats.$inferInsert;
 export type ChatSelect = typeof chats.$inferSelect;
 export type UserInsert = typeof users.$inferInsert;
 export type UserSelect = typeof users.$inferSelect;
+
+// added to fix the serializeUser user parameter error
+declare global {
+  namespace Express {
+    interface User extends UserSelect {}
+  }
+}

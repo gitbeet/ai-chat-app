@@ -1,53 +1,36 @@
-import { LoadingSpinner } from "@/components/loading";
+import { LoadingPage } from "@/components/loading";
 import { Input } from "@/components/ui/input";
 import { useUserStore } from "@/store";
-import { LucideBot, LucideRocket } from "lucide-react";
+import { LucideRocket } from "lucide-react";
 import { FormEvent, useEffect, useRef, useState } from "react";
-import DOMPurify from "dompurify";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router";
+import Message from "../message";
 
-type ChatMessage = { message: string; reply: string };
-type FormattedMessage = { role: "user" | "ai"; content: string };
-
-// Format AI messages for better display
-const formatMessage = (text: string) => {
-  if (!text) return "";
-  const cleanHTML = DOMPurify.sanitize(text);
-
-  return cleanHTML
-    .replace(/\n/g, "<br>") // Preserve line breaks
-    .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>") // Bold text
-    .replace(/\*(.*?)\*/g, "<i>$1</i>") // Italic text
-    .replace(/`(.*?)`/g, "<code>$1</code>") // Inline code
-    .replace(/(?:^|\n)- (.*?)(?:\n|$)/g, "<li>$1</li>") // Bullet points
-    .replace(/(?:^|\n)(\d+)\. (.*?)(?:\n|$)/g, "<li>$1. $2</li>") // Numbered lists
-    .replace(/<\/li>\n<li>/g, "</li><li>") // Ensure list continuity
-    .replace(/<li>/, "<ul><li>") // Wrap in `<ul>`
-    .replace(/<\/li>$/, "</li></ul>"); // Close the `<ul>`
-};
+export type ChatMessage = { message: string; reply: string };
+export type FormattedMessage = { role: "user" | "ai"; content: string };
 
 const Page = () => {
-  const { user } = useUserStore();
+  const { user, loading: loadingUser } = useUserStore();
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<FormattedMessage[]>([]);
   const [loading, setLoading] = useState(true);
-  const [sending, setSending] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [thinking, setThinking] = useState(false);
 
-  const userId = user?.email.replace(/[^a-zA-Z0-9_-]/g, "_");
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   const getMessages = async () => {
-    console.log(userId);
     try {
       const responseJSON = await fetch(
-        `${import.meta.env.VITE_API_URL}/get-messages`,
+        `${import.meta.env.VITE_API_URL}/chat/get-messages`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            userId,
+            userId: user?.userId,
           }),
         }
       );
@@ -59,7 +42,6 @@ const Page = () => {
           { role: "ai", content: msg.reply },
         ]
       );
-      console.log(formattedMessages);
       setMessages(formattedMessages);
     } catch (error) {
       alert(`Error:${error}`);
@@ -72,7 +54,7 @@ const Page = () => {
     e.preventDefault();
     if (message.length === 0) return;
     setMessages((prev) => [...prev, { role: "user", content: message }]);
-    setSending(true);
+    setThinking(true);
     try {
       const responseJSON = await fetch(`${import.meta.env.VITE_API_URL}/chat`, {
         method: "POST",
@@ -81,7 +63,7 @@ const Page = () => {
         },
         body: JSON.stringify({
           message,
-          userId,
+          userId: user?.userId,
         }),
       });
       const response = await responseJSON.json();
@@ -90,7 +72,7 @@ const Page = () => {
     } catch (error) {
       alert(`Error while sending message: ${error}`);
     } finally {
-      setSending(false);
+      setThinking(false);
     }
   };
 
@@ -100,49 +82,27 @@ const Page = () => {
   }, [user]);
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages, loading, sending]);
-
-  const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  }, [messages, loading, thinking]);
 
+  if (loadingUser) return <LoadingPage />;
+  if (!loadingUser && !user) navigate("/");
   return (
     <main className="grid grid-rows-[1fr_auto] max-w-[900px] mx-auto gap-8  pt-12 min-h-full h-[80dvh]">
       <div className="border shadow  rounded overflow-auto p-4">
-        {loading && (
-          <div className="grid place-content-center h-full">
-            <LoadingSpinner />
-          </div>
-        )}
+        {loading && <LoadingPage />}
         {!loading &&
           messages?.map((m: FormattedMessage, i) => {
             return (
-              <div key={i}>
-                {m.role === "user" && (
-                  <p className="p-4  w-fit rounded-md bg-muted shadow-md  ml-auto">
-                    {m.content}
-                  </p>
-                )}
-                {m.role === "ai" && (
-                  <div className="flex items-start gap-4  p-4">
-                    <div className=" rounded-md bg-muted shadow p-2 ">
-                      <LucideBot className="w-8 h-8" />
-                    </div>
-                    <p
-                      className="w-fit rounded  mr-auto"
-                      dangerouslySetInnerHTML={{
-                        __html: formatMessage(m.content),
-                      }}
-                    ></p>
-                  </div>
-                )}
-              </div>
+              <Message
+                key={i}
+                message={m}
+              />
             );
           })}
-        {sending && (
-          <div className="w-full py-8 grid place-content-center">
-            <LoadingSpinner />
+        {thinking && (
+          <div className="w-full py-8  grid place-content-center">
+            <LoadingPage />
           </div>
         )}
         <div ref={messagesEndRef} />
@@ -162,7 +122,6 @@ const Page = () => {
           <Button
             disabled={message.length === 0}
             type="submit"
-            variant="default"
             className="absolute right-2 top-1.5"
           >
             <LucideRocket />

@@ -1,5 +1,11 @@
 import { cn } from "@/lib/utils";
 
+export const LoadingPage = () => (
+  <div className="w-full h-full grid place-content-center">
+    <LoadingSpinner />
+  </div>
+);
+
 export const LoadingSpinner = ({ className }: { className?: string }) => {
   return (
     <svg
