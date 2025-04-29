@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { chats, users } from "../../db/schema";
 import { db } from "../../config/database";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { ChatCompletionMessageParam } from "openai/resources.mjs";
 import { chatClient, openAi } from "../../server";
 
@@ -37,7 +37,7 @@ export const chat = async (req: Request, res: Response): Promise<any> => {
       .from(chats)
       .where(eq(chats.userId, userId))
       // limit to the last 10 for now
-      .orderBy(chats.createdAt)
+      .orderBy(desc(chats.createdAt))
       .limit(10);
 
     // format the chat history for openai
@@ -54,33 +54,40 @@ export const chat = async (req: Request, res: Response): Promise<any> => {
       ]
     );
 
-    // push the current message we are sending to the conversation context
     conversation.push({ role: "user", content: message });
 
-    // send the conversation to openai
+    res.setHeader("Content-Type", "text/event-stream");
+    res.setHeader("Cache-Control", "no-cache");
+    res.setHeader("Connection", "keep-alive");
+
     const response = await openAi.chat.completions.create({
       model: "gpt-4",
       messages: conversation,
+      stream: true,
     });
 
-    // get the message from the response
-    const aiMessage =
-      response.choices[0].message?.content ?? "No response from AI";
+    let fullReply = "";
 
-    // save chat to the database
-    await db.insert(chats).values({ userId, message, reply: aiMessage });
+    for await (const part of response) {
+      if (part.choices && part.choices[0].delta.content) {
+        const chunk = part.choices[0].delta.content;
+        fullReply += chunk;
+        // Send raw text chunks
+        res.write(chunk);
+      }
+    }
 
-    // create or get channel
+    await db.insert(chats).values({ userId, message, reply: fullReply });
+
     const channel = chatClient.channel("messaging", `chat-${userId}`, {
       name: "AI Chat",
       created_by_id: "ai_bot",
     });
 
     await channel.create();
-    // send the message
-    await channel.sendMessage({ text: aiMessage, user_id: userId });
+    await channel.sendMessage({ text: fullReply, user_id: userId });
 
-    res.status(200).json({ reply: aiMessage });
+    res.end();
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }

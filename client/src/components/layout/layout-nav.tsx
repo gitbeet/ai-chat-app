@@ -19,7 +19,7 @@ const LayoutNav = () => {
   };
   console.log("USER: ", user);
   return (
-    <nav className="px-4 py-2 max-w-[1200px] flex items-center justify-between mx-auto">
+    <nav className="px-4 py-4 max-w-[1200px] flex items-center justify-between mx-auto">
       <Link
         to={"/"}
         // className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-violet-500"

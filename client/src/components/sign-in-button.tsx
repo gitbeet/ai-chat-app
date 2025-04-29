@@ -1,6 +1,5 @@
 import { useUserStore } from "@/store";
 import { Button } from "./ui/button";
-import googleLogo from "../../public/google-logo.svg";
 
 const SignInButton = ({ text = true }: { text?: boolean }) => {
   const { user } = useUserStore();
@@ -12,7 +11,7 @@ const SignInButton = ({ text = true }: { text?: boolean }) => {
       >
         <div className="flex items-center gap-2">
           <img
-            src={googleLogo}
+            src="../../public/google-logo.svg"
             className="w-4 h-4"
           />
           {text && <> Sign in with Google</>}
