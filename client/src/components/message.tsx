@@ -1,27 +1,30 @@
-import { formatMessage } from "@/lib/utils";
+import { formatMessage } from "@/lib/formatMessage";
 import { FormattedMessage } from "./pages/chat";
-import { LucideBot } from "lucide-react";
+import { useEffect, useState } from "react";
+// import { LucideBot } from "lucide-react";
 
 const Message = ({ message }: { message: FormattedMessage }) => {
+  const [m, setM] = useState("");
+  useEffect(() => {
+    function getMessage() {
+      formatMessage(message.content).then((r) => setM(r));
+    }
+    getMessage();
+  }, [message.content]);
   return (
     <div>
       {message.role === "user" && (
-        <p className="p-4  w-fit rounded-md shadow-md  ml-auto bg-muted">
+        <p className="p-4 w-fit rounded-md shadow-md bg-primary ml-auto text-white">
           {message.content}
         </p>
       )}
       {message.role === "ai" && (
-        <div className="flex items-start gap-4  p-4">
-          <div className=" rounded-md bg-muted shadow p-2 ">
-            <LucideBot className="w-8 h-8" />
-          </div>
-          <p
-            className="w-fit rounded  mr-auto"
-            dangerouslySetInnerHTML={{
-              __html: formatMessage(message.content),
-            }}
-          ></p>
-        </div>
+        <p
+          className="rounded  mr-auto py-4"
+          dangerouslySetInnerHTML={{
+            __html: m,
+          }}
+        ></p>
       )}
     </div>
   );

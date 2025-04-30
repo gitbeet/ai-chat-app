@@ -17,14 +17,13 @@ const LayoutNav = () => {
       .catch((e) => console.log(e))
       .finally(() => navigate("/"));
   };
-  console.log("USER: ", user);
   return (
     <nav className="px-4 py-4 max-w-[1200px] flex items-center justify-between mx-auto">
-      <Link
-        to={"/"}
-        // className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-violet-500"
-      >
-        <LucideMessageSquareCode size={24} />
+      <Link to={"/"}>
+        <LucideMessageSquareCode
+          size={24}
+          className="text-primary"
+        />
       </Link>
       <div className="flex gap-2 items-end">
         {user && (

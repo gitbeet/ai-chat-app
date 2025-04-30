@@ -1,7 +1,7 @@
 import { LoadingPage } from "@/components/loading";
 import { Input } from "@/components/ui/input";
 import { useUserStore } from "@/store";
-import { LucideRocket } from "lucide-react";
+import { LucideArrowDown, LucideSend } from "lucide-react";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router";
@@ -22,7 +22,10 @@ const Chat = () => {
   const [thinking, setThinking] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
+  const [buttonVisible, setButtonVisible] = useState(false);
 
   const getMessages = async () => {
     try {
@@ -133,11 +136,42 @@ const Chat = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "instant" });
   }, [messages, loading, thinking]);
 
+  const scrollDown = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    const container = chatContainerRef.current;
+    function handleScroll() {
+      if (!container) return;
+      const isButtonVisible =
+        container.scrollHeight - container.scrollTop - container.clientHeight >
+        250;
+      setButtonVisible(isButtonVisible);
+    }
+
+    container?.addEventListener("scroll", handleScroll);
+    return () => container?.removeEventListener("scroll", handleScroll);
+  }, [chatContainerRef.current]);
+
   if (loadingUser) return <LoadingPage />;
   if (!loadingUser && !user) navigate("/");
   return (
-    <main className="grid grid-rows-[1fr_auto] max-w-[900px] mx-auto gap-8  pt-12 min-h-full h-[85dvh]">
-      <div className=" overflow-auto p-4 space-y-4">
+    <main className="grid grid-rows-[1fr_auto] max-w-[800px] mx-auto gap-8  pt-12 min-h-full h-[85dvh]">
+      <div
+        ref={chatContainerRef}
+        className="overflow-auto py-4 space-y-8 scrollbar-none"
+      >
+        <Button
+          size={"icon"}
+          variant={"outline"}
+          onClick={scrollDown}
+          className={` ${
+            buttonVisible ? "opacity-100" : "opacity-0"
+          } sticky top-full -translate-y-full left-1/2 -translate-x-1/2`}
+        >
+          <LucideArrowDown />
+        </Button>
         {loading && <LoadingPage />}
         {!loading &&
           messages?.map((m: FormattedMessage, i) => {
@@ -172,7 +206,7 @@ const Chat = () => {
             type="submit"
             className="absolute right-2 top-1.5"
           >
-            <LucideRocket />
+            <LucideSend />
           </Button>
         </form>
       </div>
