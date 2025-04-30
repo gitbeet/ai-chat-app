@@ -1,11 +1,11 @@
 import { LoadingPage } from "@/components/loading";
-import { Input } from "@/components/ui/input";
 import { useUserStore } from "@/store";
 import { LucideArrowDown, LucideSend } from "lucide-react";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router";
 import Message from "../message";
+import { Textarea } from "../ui/textarea";
 
 export type ChatMessage = { message: string; reply: string };
 export type FormattedMessage = { role: "user" | "ai"; content: string };
@@ -194,17 +194,17 @@ const Chat = () => {
           onSubmit={sendMessage}
           className="relative"
         >
-          <Input
-            type="text"
+          <Textarea
+            rows={1}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            placeholder="Type something..."
-            className="w-full h-12"
+            placeholder="Ask anything!"
+            className="w-full resize-none scrollbar-none pr-14"
           />
           <Button
             disabled={message.length === 0}
             type="submit"
-            className="absolute right-2 top-1.5"
+            className="absolute right-3 top-3"
           >
             <LucideSend />
           </Button>

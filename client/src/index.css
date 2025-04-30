@@ -24,29 +24,29 @@ body {
 }
 
 :root {
-  --background: hsl(334 62% 100%);
+  --background: hsl(226 62% 100%);
   --foreground: hsl(334 55% 1%);
 
-  --muted: hsl(334 35% 95%);
-  --muted-foreground: hsl(334 9% 37%);
+  --muted: hsl(226 35% 95%);
+  --muted-foreground: hsl(226 9% 37%);
 
-  --popover: hsl(334 62% 100%);
+  --popover: hsl(226 62% 100%);
   --popover-foreground: hsl(334 55% 1%);
 
-  --card: hsl(334 62% 100%);
+  --card: hsl(226 62% 100%);
   --card-foreground: hsl(334 55% 1%);
 
-  --border: hsl(334 5% 95%);
-  --input: hsl(334 5% 95%);
+  --border: hsl(226 5% 95%);
+  --input: hsl(226 5% 95%);
 
   --primary: hsl(226.73 58.43% 65.1%);
   --primary-foreground: hsl(0 0% 100%);
 
-  --secondary: hsl(334 11% 90%);
-  --secondary-foreground: hsl(334 11% 30%);
+  --secondary: hsl(226 11% 95%);
+  --secondary-foreground: hsl(226 11% 30%);
 
-  --accent: hsl(334 20% 82%);
-  --accent-foreground: hsl(334 20% 22%);
+  --accent: hsl(226 20% 94%);
+  --accent-foreground: hsl(226 20% 22%);
 
   --destructive: hsl(18 93% 23%);
   --destructive-foreground: hsl(18 93% 83%);

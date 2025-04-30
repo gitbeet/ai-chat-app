@@ -11,7 +11,7 @@ renderer.code = ({ text, lang }) => {
   );
 
   return `
-      <div class="my-4 rounded-md overflow-hidden border border-secondary w-full">
+      <div class="my-4 mx-2 rounded-md overflow-hidden border border-secondary ">
         ${
           lang
             ? `<div class="px-4 py-2 bg-secondary text-sm font-mono">${lang}</div>`
