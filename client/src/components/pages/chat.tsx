@@ -87,12 +87,12 @@ const Chat = () => {
           );
         } else {
           return [
-            ...prev,
             {
               id: chatId,
               createdAt: new Date(),
               messages: [newMessage],
             },
+            ...prev,
           ];
         }
       });
@@ -183,6 +183,31 @@ const Chat = () => {
     }
   };
 
+  const deleteChat = async (chatId: string) => {
+    setChats((prev) => prev.filter((chat) => chat.id !== chatId));
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/chat/delete-chat`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: user?.userId,
+            chatId,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(await response.text());
+      }
+    } catch (error) {
+      console.error("Error while deleting chat: ", error);
+    }
+  };
+
   useEffect(() => {
     if (!user) return;
     getMessages();
@@ -205,6 +230,7 @@ const Chat = () => {
         currentChatId={currentChatId}
         setCurrentChatId={setCurrentChatId}
         chats={chats}
+        deleteChat={deleteChat}
       />
       {!loading && (
         <main className="grid grid-rows-[1fr_auto] max-w-[800px] mx-auto gap-8  pt-12 min-h-full  w-full">

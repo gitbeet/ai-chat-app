@@ -48,7 +48,7 @@ body {
   --accent: hsl(226 20% 94%);
   --accent-foreground: hsl(226 20% 22%);
 
-  --destructive: hsl(18 93% 23%);
+  --destructive: hsl(0, 100%, 50%);
   --destructive-foreground: hsl(18 93% 83%);
 
   --ring: hsl(226.73 58.43% 65.1%);
@@ -80,7 +80,7 @@ body {
   --accent: hsl(217.5 9.09% 17.25%);
   --accent-foreground: hsl(226.73 58.43% 65.1%);
 
-  --destructive: hsl(0 86.89% 48.16%);
+  --destructive: hsl(0, 100%, 50%);
   --destructive-foreground: hsl(0 0% 0%);
 
   --ring: hsl(217.5 9.09% 17.25%);
