@@ -1,12 +1,11 @@
 import { LoadingPage } from "@/components/loading";
 import { useUserStore } from "@/store";
-import { LucideArrowDown, LucidePlus, LucideSend } from "lucide-react";
-import { FormEvent, useEffect, useRef, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import Message from "../message";
-import { Textarea } from "../ui/textarea";
 import { v7 as uuid } from "uuid";
+import SendMessageInput from "../chat/send-message-input";
+import ChatSidebar from "../chat/chat-sidebar";
+import Messages from "../chat/messages";
 
 export type ChatMessage = { message: string; reply: string };
 export type FormattedMessage = { role: "user" | "ai"; content: string };
@@ -29,11 +28,6 @@ const Chat = () => {
   const [loading, setLoading] = useState(true);
   // for when the AI is thinking of a response
   const [thinking, setThinking] = useState(false);
-
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-  const chatContainerRef = useRef<HTMLDivElement>(null);
-
-  const [showScrollToBottom, setShowScrollToBottom] = useState(false);
 
   const getMessages = async () => {
     setLoading(true);
@@ -194,87 +188,8 @@ const Chat = () => {
     getMessages();
   }, [user]);
 
-  useEffect(() => {
-    setTimeout(() => {
-      messagesEndRef.current?.scrollIntoView({ behavior: "instant" });
-    }, 10);
-  }, [currentChatId, chats, loading, thinking]);
-
-  useEffect(() => {
-    const container = chatContainerRef.current;
-    function handleScroll() {
-      if (!container) return;
-      const isButtonVisible =
-        container.scrollHeight - container.scrollTop - container.clientHeight >
-        250;
-      setShowScrollToBottom(isButtonVisible);
-    }
-
-    container?.addEventListener("scroll", handleScroll);
-    return () => container?.removeEventListener("scroll", handleScroll);
-  }, [chatContainerRef.current]);
-
-  const scrollDown = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
   if (loadingUser) return <LoadingPage />;
   if (!loadingUser && !user) navigate("/");
-
-  const currentChat = chats.find((chat) => chat.id === currentChatId);
-
-  const inputJsx = (
-    <div>
-      <form
-        onSubmit={sendMessage}
-        className="relative"
-      >
-        <Textarea
-          rows={1}
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          placeholder="Ask anything!"
-          className="w-full resize-none scrollbar-none pr-14"
-        />
-        <Button
-          disabled={message.length === 0}
-          type="submit"
-          className="absolute right-3 top-3"
-        >
-          <LucideSend />
-        </Button>
-      </form>
-    </div>
-  );
-
-  const sidebarJsx = (
-    <div className="w-64 border-y border-r border-secondary py-8 h-[85dvh] rounded shadow absolute space-y-4">
-      <Button
-        onClick={() => setCurrentChatId(null)}
-        className="ml-4"
-      >
-        <LucidePlus />
-        New chat
-      </Button>
-      {chats.length !== 0 && (
-        <ul className="py-4">
-          {chats.map((chat) => (
-            <li
-              onClick={() => setCurrentChatId(chat.id)}
-              key={chat.id}
-              className={`truncate py-3 text-sm px-4 border-y cursor-pointer ${
-                chat.id === currentChatId
-                  ? "bg-muted border-secondary"
-                  : " border-transparent"
-              }`}
-            >
-              {chat.messages[0].content}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
 
   const emptyChatJsx = (chats.length === 0 || !currentChatId) && (
     <div className="grid place-content-center">
@@ -282,48 +197,29 @@ const Chat = () => {
     </div>
   );
 
-  const chatsJsx = chats.length !== 0 && (
-    <div
-      ref={chatContainerRef}
-      className="overflow-auto py-4 space-y-8 scrollbar-none"
-    >
-      <Button
-        size={"icon"}
-        variant={"outline"}
-        onClick={scrollDown}
-        className={` ${
-          showScrollToBottom ? "opacity-100" : "opacity-0"
-        } sticky top-full -translate-y-full left-1/2 -translate-x-1/2`}
-      >
-        <LucideArrowDown />
-      </Button>
-      {loading && <LoadingPage />}
-      {!loading &&
-        currentChat?.messages?.map((m: FormattedMessage, i) => {
-          return (
-            <Message
-              key={i}
-              message={m}
-            />
-          );
-        })}
-      {thinking && (
-        <div className="w-full py-8  grid place-content-center">
-          <LoadingPage />
-        </div>
-      )}
-      <div ref={messagesEndRef} />
-    </div>
-  );
+  const currentChat = chats.find((chat) => chat.id === currentChatId);
 
   return (
     <div className="flex h-[85dvh]">
-      {sidebarJsx}
+      <ChatSidebar
+        currentChatId={currentChatId}
+        setCurrentChatId={setCurrentChatId}
+        chats={chats}
+      />
       {!loading && (
         <main className="grid grid-rows-[1fr_auto] max-w-[800px] mx-auto gap-8  pt-12 min-h-full  w-full">
           {emptyChatJsx}
-          {chatsJsx}
-          {inputJsx}
+          <Messages
+            chat={currentChat}
+            loading={loading}
+            thinking={thinking}
+          />
+          <SendMessageInput
+            disabled={message.length === 0}
+            value={message}
+            onSubmit={sendMessage}
+            onChange={(e) => setMessage(e.target.value)}
+          />
         </main>
       )}
     </div>

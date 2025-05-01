@@ -1,5 +1,5 @@
 import { formatMessage } from "@/lib/formatMessage";
-import { FormattedMessage } from "./pages/chat";
+import { FormattedMessage } from "../pages/chat";
 import { useEffect, useState } from "react";
 // import { LucideBot } from "lucide-react";
 
