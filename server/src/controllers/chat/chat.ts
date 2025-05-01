@@ -1,29 +1,23 @@
 import { Request, Response } from "express";
-import { chats, users } from "../../db/schema";
 import { db } from "../../config/database";
-import { desc, eq } from "drizzle-orm";
+
 import { ChatCompletionMessageParam } from "openai/resources.mjs";
-import { chatClient, openAi } from "../../server";
+import { openAi } from "../../server";
+import { chats, users } from "../../db/schema";
+import { eq } from "drizzle-orm";
+import { messages as messagesSchema } from "../../db/schema";
 
 export const chat = async (req: Request, res: Response): Promise<any> => {
-  const { message, userId } = req.body;
-  if (!message || !userId) {
-    res.status(400).json({ error: "Message and user are required" });
+  const { message, userId, chatId } = req.body;
+  if (!message || !userId || !chatId) {
+    res.status(400).json({ error: "Message,userId or chatId missing" });
   }
   try {
-    // verify user exists
-    const userResponse = await chatClient.queryUsers({ id: { $eq: userId } });
-    if (userResponse.users.length === 0) {
-      return res
-        .status(404)
-        .json({ error: "User not found. Please register first" });
-    }
-
     // check for existing user in the database
     const existingUser = await db
       .select()
       .from(users)
-      .where(eq(users.userId, userId));
+      .where(eq(users.id, userId));
     // if the user does not exist, return 404
     if (existingUser.length === 0) {
       return res.status(404).json({
@@ -31,17 +25,23 @@ export const chat = async (req: Request, res: Response): Promise<any> => {
       });
     }
 
+    // check if chat exists
+    const existingChat = await db.query.chats.findFirst({
+      where: (model, { eq }) => (eq as any)(model.id, chatId),
+    });
+
+    // if chat does not exist
+    if (!existingChat) {
+      await db.insert(chats).values({ id: chatId, userId });
+    }
+
     // fetch user's past messages to pass as a context
-    const chatHistory = await db
-      .select()
-      .from(chats)
-      .where(eq(chats.userId, userId))
-      // limit to the last 10 for now
-      .orderBy(desc(chats.createdAt))
-      .limit(10);
+    const messages = await db.query.messages.findMany({
+      where: (model, { eq }) => (eq as any)(model.chatId, chatId),
+    });
 
     // format the chat history for openai
-    const conversation: ChatCompletionMessageParam[] = chatHistory.flatMap(
+    const conversation: ChatCompletionMessageParam[] = messages.flatMap(
       (chat) => [
         {
           role: "user",
@@ -77,15 +77,9 @@ export const chat = async (req: Request, res: Response): Promise<any> => {
       }
     }
 
-    await db.insert(chats).values({ userId, message, reply: fullReply });
-
-    const channel = chatClient.channel("messaging", `chat-${userId}`, {
-      name: "AI Chat",
-      created_by_id: "ai_bot",
-    });
-
-    await channel.create();
-    await channel.sendMessage({ text: fullReply, user_id: userId });
+    await db
+      .insert(messagesSchema)
+      .values({ chatId, message, reply: fullReply });
 
     res.end();
   } catch (error) {

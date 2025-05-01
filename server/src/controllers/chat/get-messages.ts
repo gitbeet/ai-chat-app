@@ -1,6 +1,4 @@
 import { Request, Response } from "express";
-import { chats } from "../../db/schema";
-import { eq } from "drizzle-orm";
 import { db } from "../../config/database";
 
 export const getMessages = async (
@@ -12,12 +10,15 @@ export const getMessages = async (
     return res.status(400).json({ error: "User ID is required" });
   }
   try {
-    const chatHistory = await db
-      .select()
-      .from(chats)
-      .where(eq(chats.userId, userId));
+    const chatHistory = await db.query.chats.findMany({
+      where: (chats, { eq }) => (eq as any)(chats.userId, userId),
+      orderBy: (chats, { desc }) => [desc(chats.createdAt)],
+      with: {
+        messages: true,
+      },
+    });
 
-    res.status(200).json({ messages: chatHistory });
+    res.status(200).json({ chats: chatHistory });
   } catch (error) {
     console.log("Error getting the chat history: ", error);
     res.status(500).json({ error: "Internal server error" });

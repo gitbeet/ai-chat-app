@@ -1,7 +1,8 @@
 import { neon } from "@neondatabase/serverless";
-import { drizzle } from "drizzle-orm/neon-http";
+import { drizzle } from "drizzle-orm/neon-serverless";
 import { config } from "dotenv";
-
+import * as schema from "../db/schema";
+import ws from "ws";
 // load env variables
 config({ path: ".env" });
 
@@ -10,8 +11,8 @@ if (!process.env.DATABASE_URL) {
   throw new Error("No DATABASE_URL found");
 }
 
-// init neon client
-const sql = neon(process.env.DATABASE_URL);
-
-// init drizzle with the neon client
-export const db = drizzle(sql);
+export const db = drizzle({
+  connection: process.env.DATABASE_URL,
+  ws,
+  schema,
+});

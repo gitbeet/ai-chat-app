@@ -1,7 +1,6 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { StreamChat } from "stream-chat";
 import OpenAI from "openai";
 import expressSession from "express-session";
 import { CipherKey } from "crypto";
@@ -43,12 +42,6 @@ app.use(passport.session());
 
 // initialize openai
 export const openAi = new OpenAI({ apiKey: process.env.OPEN_AI_API_KEY });
-
-// initialize the stream client
-export const chatClient = StreamChat.getInstance(
-  process.env.STREAM_API_KEY!,
-  process.env.STREAM_API_SECRET!
-);
 
 app.use("/chat", chatRoutes);
 app.use("/auth", authRoutes);

@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1745135340694,
-      "tag": "0000_amusing_starbolt",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1745137025985,
-      "tag": "0001_demonic_king_cobra",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1745766059534,
-      "tag": "0002_smooth_wild_pack",
+      "when": 1746101564373,
+      "tag": "0000_sparkling_landau",
       "breakpoints": true
     }
   ]
