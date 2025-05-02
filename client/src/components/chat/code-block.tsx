@@ -40,7 +40,7 @@ const CodeBlock = ({ code, language, highlighted }: CodeBlockProps) => {
           <span className="text-xs">{copied ? "Copied" : "Copy"}</span>
         </Button>
       </div>
-      <pre className="bg-card p-4">
+      <pre className="bg-card p-4 overflow-x-auto">
         <code
           className={`language-${language} hljs`}
           dangerouslySetInnerHTML={{ __html: purified }}
