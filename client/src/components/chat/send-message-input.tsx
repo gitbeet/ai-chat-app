@@ -1,7 +1,7 @@
 import { LucideSend } from "lucide-react";
 import { Button } from "../ui/button";
-import { Textarea } from "../ui/textarea";
-import { ChangeEvent, FormEvent } from "react";
+import { AutoResizeTextArea } from "../ui/textarea";
+import { ChangeEvent, FormEvent, useEffect, useRef } from "react";
 
 interface Props {
   disabled: boolean;
@@ -11,12 +11,26 @@ interface Props {
 }
 
 const SendMessageInput = ({ onSubmit, onChange, value, disabled }: Props) => {
+  const formRef = useRef<HTMLFormElement>(null);
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Enter" && !e.shiftKey && formRef.current) {
+        e.preventDefault();
+        formRef.current.requestSubmit();
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   return (
     <form
+      ref={formRef}
       onSubmit={onSubmit}
       className="relative"
     >
-      <Textarea
+      <AutoResizeTextArea
         rows={1}
         value={value}
         onChange={onChange}

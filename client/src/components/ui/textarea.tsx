@@ -1,6 +1,36 @@
-import * as React from "react"
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
-import { cn } from "@/lib/utils"
+interface AutoResizeTextAreaProps extends React.ComponentProps<"textarea"> {
+  maxHeight?: number;
+}
+
+function AutoResizeTextArea({
+  maxHeight = 150,
+  ...props
+}: AutoResizeTextAreaProps) {
+  const ref = React.useRef<HTMLTextAreaElement>(null);
+
+  function adjustHeight() {
+    if (!ref.current) return;
+    ref.current.style.height = "auto";
+    ref.current.style.height = `${
+      ref.current.scrollHeight > maxHeight
+        ? maxHeight
+        : ref.current.scrollHeight
+    }px`;
+  }
+
+  React.useEffect(adjustHeight, [props.value, maxHeight]);
+
+  return (
+    <Textarea
+      ref={ref}
+      {...props}
+      className={`resize-none ${props.className ?? ""}`}
+    />
+  );
+}
 
 function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
   return (
@@ -12,7 +42,7 @@ function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
       )}
       {...props}
     />
-  )
+  );
 }
 
-export { Textarea }
+export { Textarea, AutoResizeTextArea };
