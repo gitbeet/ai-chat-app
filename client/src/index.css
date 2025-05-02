@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "./highlight.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -24,6 +25,8 @@ body {
 }
 
 :root {
+  --mono: "Fira Code", monospace;
+
   --background: hsl(226 62% 100%);
   --foreground: hsl(334 55% 1%);
 
@@ -53,6 +56,15 @@ body {
 
   --ring: hsl(226.73 58.43% 65.1%);
   --radius: 0.5rem;
+
+  --code-yellow: #c18401; /* bright mustard for class/function names */
+  --code-comment: #6e7781; /* soft gray for comments, not too faint */
+  --code-red: #d73a49; /* vivid red for errors, numbers, literals */
+  --code-green: #22863a; /* classic green for strings, regex */
+  --code-purple: #6f42c1; /* rich purple for attributes or props */
+  --code-blue: #0366d6; /* bright blue for keywords (if, return, etc.) */
+  --code-aqua: #1b7c83; /* cyan-teal mix for variables */
+  --code-orange: #e36209; /* orange for built-ins, types */
 }
 
 .dark {
@@ -84,6 +96,15 @@ body {
   --destructive-foreground: hsl(0 0% 0%);
 
   --ring: hsl(217.5 9.09% 17.25%);
+
+  --code-yellow: #f0c674; /* soft gold – great for function/class names */
+  --code-comment: #7f848e; /* medium gray – clear but unobtrusive */
+  --code-red: #e06c75; /* rose red – for errors, constants, literals */
+  --code-green: #98c379; /* soft green – for strings, regex */
+  --code-purple: #c678dd; /* bright lavender – for props, attributes */
+  --code-blue: #61afef; /* sky blue – for keywords, operators */
+  --code-aqua: #56b6c2; /* cyan – for variables, params */
+  --code-orange: #d19a66; /* warm orange – for built-ins, types */
 }
 
 @theme inline {

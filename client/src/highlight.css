@@ -1,0 +1,108 @@
+.hljs {
+  font-family: var(--mono);
+  background-color: var(--card);
+  color: var(--card-foreground);
+}
+
+.hljs * {
+  font-family: inherit;
+}
+
+/*color: fg_yellow*/
+.hljs-title,
+.hljs-name {
+  color: var(--code-yellow);
+}
+/*color: fg_comment*/
+.hljs-comment,
+.hljs-meta,
+.hljs-meta .hljs-keyword {
+  color: var(--code-comment);
+}
+/*color: fg_red*/
+.hljs-number,
+.hljs-symbol,
+.hljs-literal,
+.hljs-deletion,
+.hljs-link {
+  color: var(--code-red);
+}
+/*color: fg_green*/
+.hljs-string,
+.hljs-doctag,
+.hljs-addition,
+.hljs-regexp,
+.hljs-selector-attr,
+.hljs-selector-pseudo {
+  color: var(--code-green);
+}
+/*color: fg_purple*/
+.hljs-attribute,
+.hljs-code,
+.hljs-selector-id {
+  color: var(--code-purple);
+}
+/*color: fg_blue*/
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-bullet,
+.hljs-tag {
+  color: var(--code-blue);
+}
+/*color: fg_aqua*/
+.hljs-subst,
+.hljs-variable,
+.hljs-template-tag,
+.hljs-template-variable {
+  color: var(--code-aqua);
+}
+
+/*color: fg_orange*/
+.hljs-type,
+.hljs-built_in,
+.hljs-quote,
+.hljs-section,
+.hljs-selector-class {
+  color: var(--code-orange);
+}
+
+/* Function definitions and calls */
+.hljs-function .hljs-title,
+.hljs-title.function_,
+.hljs-function {
+  color: var(--code-yellow);
+}
+
+/* Parameters to functions */
+.hljs-params {
+  color: var(--code-aqua);
+}
+
+/* Class names */
+.hljs-class,
+.hljs-class .hljs-title {
+  color: var(--code-orange);
+}
+
+/* Properties, object keys */
+.hljs-property {
+  color: var(--code-purple);
+}
+
+/* Operators and punctuation */
+.hljs-operator,
+.hljs-punctuation {
+  color: var(--code-comment); /* or something subtle */
+}
+
+/* Language-injected variables */
+.hljs-variable.language_ {
+  color: var(--code-aqua);
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+.hljs-strong {
+  font-weight: bold;
+}

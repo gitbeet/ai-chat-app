@@ -21,7 +21,7 @@ const ChatSidebar = ({
   chats,
   deleteChat,
 }: Props) => {
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(true);
   const toggleSidebar = () => setShow((prev) => !prev);
 
   return (
@@ -52,7 +52,7 @@ const ChatSidebar = ({
               key={chat.id}
               className={` border relative group max-w-full py-3 text-sm mx-4 rounded-md px-4  cursor-pointer ${
                 chat.id === currentChatId
-                  ? "bg-background  border-secondary text-white"
+                  ? "bg-background  border-secondary "
                   : " border-transparent"
               }`}
             >
