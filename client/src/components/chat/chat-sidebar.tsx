@@ -134,7 +134,7 @@ const ChatSidebar = ({
                           <Button
                             onClick={() => deleteChat(chat.id)}
                             variant={"destructive"}
-                            size={"xs"}
+                            size={"iconSm"}
                             className={` ${
                               currentChatId === chat.id
                                 ? "opacity-0 group-hover:opacity-100"

@@ -8,10 +8,10 @@ export default function Home() {
   return (
     <div className="grid items-center justify-items-center min-h-[80dvh] p-8  gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-[32px] items-center justify-center ">
-        <h1 className="text-5xl font-black">
+        <h1 className="text-5xl font-black text-center">
           Ask Anything. Get Answers Instantly.
         </h1>
-        <h3>
+        <h3 className="text-center">
           Experience next-gen AI conversations—fast, accurate, and always
           learning.
         </h3>
@@ -38,7 +38,6 @@ export default function Home() {
             </Link>
           </div>
         )}
-        {/* <SignInButton /> */}
       </main>
     </div>
   );
