@@ -1,8 +1,8 @@
-import { FormattedMessage } from "../pages/chat";
+import { FormattedChatMessage } from "../pages/chat";
 import TextFormatter from "../text-formatter";
 // import { LucideBot } from "lucide-react";
 
-const Message = ({ message }: { message: FormattedMessage }) => {
+const Message = ({ message }: { message: FormattedChatMessage }) => {
   return (
     <div>
       {message.role === "user" && (

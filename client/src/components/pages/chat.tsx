@@ -1,18 +1,24 @@
 import { LoadingPage } from "@/components/loading";
 import { useUserStore } from "@/store";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { v7 as uuid } from "uuid";
 import SendMessageInput from "../chat/send-message-input";
 import ChatSidebar from "../chat/chat-sidebar";
 import Messages from "../chat/messages";
 
-export type ChatMessage = { message: string; reply: string };
-export type FormattedMessage = { role: "user" | "ai"; content: string };
+export type APIResponseChatMessage = { message: string; reply: string };
+export type FormattedChatMessage = { role: "user" | "ai"; content: string };
 
 export type Chat = {
   id: string;
-  messages: FormattedMessage[];
+  messages: FormattedChatMessage[];
+  createdAt: Date;
+};
+
+type APIResponseChat = {
+  id: string;
+  messages: APIResponseChatMessage[];
   createdAt: Date;
 };
 
@@ -29,7 +35,7 @@ const Chat = () => {
   // for when the AI is thinking of a response
   const [thinking, setThinking] = useState(false);
 
-  const getMessages = async () => {
+  const getMessages = useCallback(async () => {
     setLoading(true);
     try {
       const responseJSON = await fetch(
@@ -46,24 +52,25 @@ const Chat = () => {
       );
       const response = await responseJSON.json();
       if (response.chats.length === 0) return;
-      response.chats.forEach((chat) => {
+      const formattedChats: Chat[] = [];
+      response.chats.forEach((chat: APIResponseChat) => {
         const formattedMessages = chat.messages.flatMap(
-          (msg: ChatMessage): FormattedMessage[] => [
+          (msg: APIResponseChatMessage): FormattedChatMessage[] => [
             { role: "user", content: msg.message },
             { role: "ai", content: msg.reply },
           ]
         );
-        chat.messages = formattedMessages;
+        const formattedChat: Chat = { ...chat, messages: formattedMessages };
+        formattedChats.push(formattedChat);
       });
-      setChats(response.chats);
-      setCurrentChatId(response.chats[0].id);
-      console.log(response.chats);
+      setChats(formattedChats);
+      setCurrentChatId(formattedChats[0].id);
     } catch (error) {
       alert(`Error:${error}`);
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.userId]);
 
   const sendMessage = async (e: FormEvent) => {
     e.preventDefault();
@@ -74,7 +81,10 @@ const Chat = () => {
 
     try {
       setThinking(true);
-      const newMessage: FormattedMessage = { role: "user", content: message };
+      const newMessage: FormattedChatMessage = {
+        role: "user",
+        content: message,
+      };
 
       // update state regardless
       setChats((prev) => {
@@ -127,7 +137,7 @@ const Chat = () => {
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
-      const aiMessage: FormattedMessage = { role: "ai", content: "" };
+      const aiMessage: FormattedChatMessage = { role: "ai", content: "" };
 
       setThinking(false);
 
@@ -211,7 +221,7 @@ const Chat = () => {
   useEffect(() => {
     if (!user) return;
     getMessages();
-  }, [user]);
+  }, [user, getMessages]);
 
   if (loadingUser) return <LoadingPage />;
   if (!loadingUser && !user) navigate("/");

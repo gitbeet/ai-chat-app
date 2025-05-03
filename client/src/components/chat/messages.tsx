@@ -3,7 +3,7 @@ import { LoadingPage } from "../loading";
 import Message from "./message";
 import { Button } from "../ui/button";
 import { useEffect, useRef, useState } from "react";
-import { Chat, FormattedMessage } from "../pages/chat";
+import { Chat, FormattedChatMessage } from "../pages/chat";
 
 interface Props {
   loading: boolean;
@@ -56,7 +56,7 @@ const Messages = ({ loading, thinking, chat }: Props) => {
       </Button>
       {loading && <LoadingPage />}
       {!loading &&
-        chat?.messages?.map((m: FormattedMessage, i) => {
+        chat?.messages?.map((m: FormattedChatMessage, i) => {
           return (
             <Message
               key={i}
