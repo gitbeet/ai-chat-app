@@ -11,7 +11,7 @@ const SignInButton = ({ text = true }: { text?: boolean }) => {
       >
         <div className="flex items-center gap-2">
           <img
-            src="../../public/google-logo.svg"
+            src="/google-logo.svg"
             className="w-4 h-4"
           />
           {text && <> Sign in with Google</>}
