@@ -6,6 +6,7 @@ import { v7 as uuid } from "uuid";
 import SendMessageInput from "../chat/send-message-input";
 import ChatSidebar from "../chat/chat-sidebar";
 import Messages from "../chat/messages";
+import { toast } from "sonner";
 
 export type APIResponseChatMessage = { message: string; reply: string };
 export type FormattedChatMessage = { role: "user" | "ai"; content: string };
@@ -38,7 +39,7 @@ const Chat = () => {
   const getMessages = useCallback(async () => {
     setLoading(true);
     try {
-      const responseJSON = await fetch(
+      const response = await fetch(
         `${import.meta.env.VITE_API_URL}/chat/get-messages`,
         {
           method: "POST",
@@ -48,10 +49,15 @@ const Chat = () => {
           credentials: "include",
         }
       );
-      const response = await responseJSON.json();
-      if (response.chats.length === 0) return;
+
+      if (!response.ok) {
+        return toast.error("Error while getting the messages");
+      }
+
+      const result = await response.json();
+      if (result.chats.length === 0) return;
       const formattedChats: Chat[] = [];
-      response.chats.forEach((chat: APIResponseChat) => {
+      result.chats.forEach((chat: APIResponseChat) => {
         const formattedMessages = chat.messages.flatMap(
           (msg: APIResponseChatMessage): FormattedChatMessage[] => [
             { role: "user", content: msg.message },
@@ -63,8 +69,9 @@ const Chat = () => {
       });
       setChats(formattedChats);
       setCurrentChatId(formattedChats[0].id);
-    } catch (error) {
-      alert(`Error:${error}`);
+    } catch (e) {
+      console.error(e);
+      toast.error("Error while getting the messages");
     } finally {
       setLoading(false);
     }
@@ -125,12 +132,8 @@ const Chat = () => {
         credentials: "include",
       });
 
-      if (!response.ok) {
-        throw new Error(await response.text());
-      }
-
-      if (!response.body) {
-        throw new Error("No response body");
+      if (!response.ok || !response.body) {
+        return toast.error("Error getting the response");
       }
 
       const reader = response.body.getReader();
@@ -171,6 +174,7 @@ const Chat = () => {
       }
     } catch (error) {
       console.error("Error:", error);
+      toast.error("Sorry, there was an error processing your request.");
       setChats((prev) =>
         prev.map((chat) =>
           chat.id === chatId
@@ -213,6 +217,7 @@ const Chat = () => {
       }
     } catch (error) {
       console.error("Error while deleting chat: ", error);
+      toast.error("Error while deleting chat");
     }
   };
 

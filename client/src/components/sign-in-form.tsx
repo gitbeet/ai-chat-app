@@ -21,6 +21,7 @@ import {
 } from "./ui/form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 
 export function SignInForm({
   className,
@@ -57,11 +58,10 @@ export function SignInForm({
         credentials: "include",
       }
     );
-    if (!response.ok) {
-      alert(await response.text());
-    }
     const result = await response.json();
-    alert(result.message ?? "No message");
+    if (result.error) {
+      toast.error(result.error);
+    }
     if (result.success) {
       form.reset();
       setUser({ name: result.user.name, userId: result.user.userId });

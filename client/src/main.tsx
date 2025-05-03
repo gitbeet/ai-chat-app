@@ -11,6 +11,8 @@ import { useUserStore } from "./store";
 import NotFound from "./components/pages/not-found";
 import SignUp from "./components/pages/sign-up";
 import SignIn from "./components/pages/sign-in";
+import { Toaster } from "sonner";
+import { LucideBadgeAlert } from "lucide-react";
 
 const router = createBrowserRouter([
   {
@@ -52,6 +54,21 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider defaultTheme="system">
       <App />
+      <Toaster
+        duration={3000}
+        position="bottom-center"
+        icons={{
+          error: <LucideBadgeAlert />,
+        }}
+        toastOptions={{
+          classNames: {
+            default:
+              "!bg-card !border !border-border !text-card-foreground !gap-4",
+            error: "!text-destructive",
+            content: "text-base",
+          },
+        }}
+      />
     </ThemeProvider>
   </StrictMode>
 );

@@ -20,6 +20,7 @@ import {
   FormLabel,
   FormMessage,
 } from "./ui/form";
+import { toast } from "sonner";
 
 export function SignUpForm({
   className,
@@ -54,9 +55,7 @@ export function SignUpForm({
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const { email, username, password, confirmPassword } = values;
-    if (password !== confirmPassword) return alert("Passwords do not match");
-    if (password.length < 6) return alert("Password too short");
+    const { email, username, password } = values;
     const response = await fetch(
       `${import.meta.env.VITE_API_URL}/auth/local/sign-up`,
       {
@@ -68,12 +67,11 @@ export function SignUpForm({
         credentials: "include",
       }
     );
-    if (!response.ok) {
-      alert(await response.text());
-    }
     const result = await response.json();
+    if (result.error) {
+      return toast.error(result.error);
+    }
     form.reset();
-    alert(result.message ?? "No message");
   };
 
   return (

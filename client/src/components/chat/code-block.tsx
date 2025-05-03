@@ -2,6 +2,7 @@ import { useState } from "react";
 import { LucideCheck, LucideCopy } from "lucide-react";
 import { Button } from "../ui/button";
 import DOMPurify from "dompurify";
+import { toast } from "sonner";
 interface CodeBlockProps {
   code: string;
   language?: string;
@@ -17,7 +18,8 @@ const CodeBlock = ({ code, language, highlighted }: CodeBlockProps) => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      console.error("Copy failed", err);
+      console.error("Copy failed: ", err);
+      toast.error("Copy failed");
     }
   };
 
