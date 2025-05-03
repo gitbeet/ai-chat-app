@@ -9,7 +9,7 @@ import { profileInfo, users } from "../../../db/schema";
 const signUp = async (req: Request, res: Response) => {
   try {
     if (!req.body.email || !req.body.password || !req.body.username) {
-      res.status(400).send("Invalid body");
+      res.status(400).send({ error: "Bad request" });
     }
     // const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const existingUser = await db.query.users.findFirst({
@@ -17,7 +17,7 @@ const signUp = async (req: Request, res: Response) => {
     });
 
     if (existingUser) {
-      res.status(400).json({ message: "Email already in use" });
+      res.status(400).json({ error: "Email already in use" });
       return;
     }
 
@@ -48,7 +48,10 @@ const signUp = async (req: Request, res: Response) => {
       });
       res
         .status(201)
-        .json({ message: `User ${req.body.username} created successfully` });
+        .json({
+          success: true,
+          message: `User ${req.body.username} created successfully`,
+        });
     }
   } catch (error) {
     res.status(500).send({ error: `Server error: ${error}` });
