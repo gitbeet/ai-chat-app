@@ -58,12 +58,12 @@ createRoot(document.getElementById("root")!).render(
         duration={3000}
         position="bottom-center"
         icons={{
-          error: <LucideBadgeAlert />,
+          error: <LucideBadgeAlert className="h-5 w-5" />,
         }}
         toastOptions={{
           classNames: {
             default:
-              "!bg-card !border !border-border !text-card-foreground !gap-4",
+              "!bg-card !border !border-border !text-card-foreground !gap-1.5",
             error: "!text-destructive",
             content: "text-base",
           },

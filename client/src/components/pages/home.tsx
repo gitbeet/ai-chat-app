@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useUserStore } from "@/store";
+import { LucideMessageSquareShare } from "lucide-react";
 import { Link } from "react-router";
 
 export default function Home() {
@@ -23,6 +24,7 @@ export default function Home() {
                 variant={"default"}
                 size={"lg"}
               >
+                <LucideMessageSquareShare />
                 Start chatting
               </Button>
             </Link>

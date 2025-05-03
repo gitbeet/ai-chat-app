@@ -17,7 +17,6 @@ const strategy = new GoogleStrategy(
       // get the ID and the displayName from the google profile data
       const { id, displayName, emails } = profile;
       // TODO : fix later?
-      console.log(emails);
       if (!emails?.[0]) {
         return done(null, false, { message: "No emails" });
       }

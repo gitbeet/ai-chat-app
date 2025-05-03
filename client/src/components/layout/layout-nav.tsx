@@ -1,4 +1,4 @@
-import { LucideMessageSquareCode } from "lucide-react";
+import { LucideBotMessageSquare } from "lucide-react";
 import { useUserStore } from "@/store";
 import { ModeToggle } from "../mode-toggle";
 import { Button } from "../ui/button";
@@ -19,10 +19,7 @@ const LayoutNav = () => {
   return (
     <nav className="px-4 py-4 max-w-[1200px] flex items-center justify-between mx-auto">
       <Link to={"/"}>
-        <LucideMessageSquareCode
-          size={24}
-          className="text-primary"
-        />
+        <LucideBotMessageSquare size={24} />
       </Link>
       <div className="flex gap-2 items-end">
         {user && (

@@ -13,7 +13,18 @@ const renderer: Partial<ReactRenderer> = {
     );
   },
   listItem(text) {
-    return <li className="mb-1">{text}</li>;
+    const key = text
+      ? text.toString().substring(0, 10) +
+        Math.random().toString(36).substring(2, 9)
+      : Math.random().toString(36).substring(2, 9);
+    return (
+      <li
+        key={key}
+        className="mb-1"
+      >
+        {text}
+      </li>
+    );
   },
   code(code: string, infostring?: string) {
     const language = infostring?.trim();
