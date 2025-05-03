@@ -18,9 +18,7 @@ const Messages = ({ loading, thinking, chat }: Props) => {
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setTimeout(() => {
-      messagesEndRef.current?.scrollIntoView({ behavior: "instant" });
-    }, 10);
+    messagesEndRef.current?.scrollIntoView({ behavior: "instant" });
   }, [chat?.id, loading, thinking]);
 
   useEffect(() => {

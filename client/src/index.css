@@ -27,84 +27,82 @@ body {
 :root {
   --mono: "Fira Code", monospace;
 
-  --background: hsl(226 62% 100%);
-  --foreground: hsl(334 55% 1%);
-
-  --muted: hsl(226 35% 95%);
-  --muted-foreground: hsl(226 9% 37%);
-
-  --popover: hsl(226 62% 100%);
-  --popover-foreground: hsl(334 55% 1%);
-
-  --card: hsl(226 62% 100%);
-  --card-foreground: hsl(334 55% 1%);
-
-  --border: hsl(226 5% 95%);
-  --input: hsl(226 5% 95%);
-
-  --primary: hsl(226.73 58.43% 65.1%);
+  --background: hsl(226 62% 99%);
+  --foreground: hsl(334 55% 4%);
+  --muted: hsl(226 35% 93%);
+  --muted-foreground: hsl(226 12% 32%);
+  --popover: hsl(226 62% 99%);
+  --popover-foreground: hsl(334 55% 4%);
+  --card: hsl(226 62% 99%);
+  --card-foreground: hsl(334 55% 4%);
+  --border: hsl(226 10% 90%);
+  --input: hsl(226 10% 90%);
+  --primary: hsl(226.73 60% 60%);
   --primary-foreground: hsl(0 0% 100%);
-
-  --secondary: hsl(226 11% 95%);
-  --secondary-foreground: hsl(226 11% 30%);
-
-  --accent: hsl(226 20% 94%);
-  --accent-foreground: hsl(226 20% 22%);
-
-  --destructive: hsl(0, 100%, 50%);
-  --destructive-foreground: hsl(18 93% 83%);
-
-  --ring: hsl(226.73 58.43% 65.1%);
+  --secondary: hsl(226 14% 92%);
+  --secondary-foreground: hsl(226 16% 25%);
+  --accent: hsl(226 25% 92%);
+  --accent-foreground: hsl(226 25% 20%);
+  --destructive: hsl(0, 85%, 48%);
+  --destructive-foreground: hsl(0 0% 100%);
+  --ring: hsl(226.73 60% 60%);
   --radius: 0.5rem;
 
-  --code-yellow: #c18401; /* bright mustard for class/function names */
-  --code-comment: #6e7781; /* soft gray for comments, not too faint */
-  --code-red: #d73a49; /* vivid red for errors, numbers, literals */
-  --code-green: #22863a; /* classic green for strings, regex */
-  --code-purple: #6f42c1; /* rich purple for attributes or props */
-  --code-blue: #0366d6; /* bright blue for keywords (if, return, etc.) */
-  --code-aqua: #1b7c83; /* cyan-teal mix for variables */
-  --code-orange: #e36209; /* orange for built-ins, types */
+  --code-yellow: #b07d04;
+  --code-comment: #5d6673;
+  --code-red: #cf222e;
+  --code-green: #116329;
+  --code-purple: #6e40c9;
+  --code-blue: #0969da;
+  --code-aqua: #1a7f78;
+  --code-orange: #bc4c00;
+  --sidebar: hsl(0 0% 98%);
+  --sidebar-foreground: hsl(240 5.3% 26.1%);
+  --sidebar-primary: hsl(240 5.9% 10%);
+  --sidebar-primary-foreground: hsl(0 0% 98%);
+  --sidebar-accent: hsl(240 4.8% 95.9%);
+  --sidebar-accent-foreground: hsl(240 5.9% 10%);
+  --sidebar-border: hsl(220 13% 91%);
+  --sidebar-ring: hsl(217.2 91.2% 59.8%);
 }
 
 .dark {
-  --background: hsl(217.5 9.09% 17.25%);
+  --background: hsl(217.5 12% 16%);
   --foreground: hsl(334 34% 98%);
-
-  --muted: hsl(210 9.09% 12.94%);
-  --muted-foreground: hsl(334 0% 60.77%);
-
-  --popover: hsl(210 9.09% 12.94%);
+  --muted: hsl(210 12% 11%);
+  --muted-foreground: hsl(334 5% 65%);
+  --popover: hsl(210 12% 13%);
   --popover-foreground: hsl(334 34% 98%);
-
-  --card: hsl(210 9.09% 12.94%);
+  --card: hsl(210 12% 13%);
   --card-foreground: hsl(334 34% 98%);
-
-  --border: hsl(334 0% 18.46%);
-  --input: hsl(214.29 5.04% 27.25%);
-
-  --primary: hsl(226.73 58.43% 65.1%);
+  --border: hsl(334 5% 20%);
+  --input: hsl(214.29 8% 27%);
+  --primary: hsl(226.73 65% 62%);
   --primary-foreground: hsl(0 0% 100%);
+  --secondary: hsl(214.29 8% 28%);
+  --secondary-foreground: hsl(334 5% 95%);
+  --accent: hsl(217.5 15% 22%);
+  --accent-foreground: hsl(226.73 65% 75%);
+  --destructive: hsl(0, 92%, 60%);
+  --destructive-foreground: hsl(0 0% 100%);
+  --ring: hsl(226.73 65% 62%);
 
-  --secondary: hsl(214.29 5.04% 27.25%);
-  --secondary-foreground: hsl(334 0% 100%);
-
-  --accent: hsl(217.5 9.09% 17.25%);
-  --accent-foreground: hsl(226.73 58.43% 65.1%);
-
-  --destructive: hsl(0, 100%, 50%);
-  --destructive-foreground: hsl(0 0% 0%);
-
-  --ring: hsl(217.5 9.09% 17.25%);
-
-  --code-yellow: #f0c674; /* soft gold – great for function/class names */
-  --code-comment: #7f848e; /* medium gray – clear but unobtrusive */
-  --code-red: #e06c75; /* rose red – for errors, constants, literals */
-  --code-green: #98c379; /* soft green – for strings, regex */
-  --code-purple: #c678dd; /* bright lavender – for props, attributes */
-  --code-blue: #61afef; /* sky blue – for keywords, operators */
-  --code-aqua: #56b6c2; /* cyan – for variables, params */
-  --code-orange: #d19a66; /* warm orange – for built-ins, types */
+  --code-yellow: #e9b855;
+  --code-comment: #8b949e;
+  --code-red: #ff7b82;
+  --code-green: #7ee787;
+  --code-purple: #d2a8ff;
+  --code-blue: #79c0ff;
+  --code-aqua: #56d4dd;
+  --code-orange: #ffa657;
+  --sidebar: hsl(240 5.9% 10%);
+  --sidebar-foreground: hsl(240 4.8% 95.9%);
+  --sidebar-primary: hsl(224.3 76.3% 48%);
+  --sidebar-primary-foreground: hsl(0 0% 100%);
+  --sidebar-accent: hsl(240 3.7% 15.9%);
+  --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
+  --sidebar-border: hsl(240 3.7% 15.9%);
+  --sidebar-ring: hsl(217.2 91.2% 59.8%);
 }
 
 @theme inline {
