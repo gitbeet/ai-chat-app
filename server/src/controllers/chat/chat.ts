@@ -8,7 +8,8 @@ import { eq } from "drizzle-orm";
 import { messages as messagesSchema } from "../../db/schema";
 
 export const chat = async (req: Request, res: Response): Promise<any> => {
-  const { message, userId, chatId } = req.body;
+  const { message, chatId } = req.body;
+  const { userId } = req.user!;
   if (!message || !userId || !chatId) {
     res.status(400).json({ error: "Message,userId or chatId missing" });
   }

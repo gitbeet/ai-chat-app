@@ -45,9 +45,7 @@ const Chat = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            userId: user?.userId,
-          }),
+          credentials: "include",
         }
       );
       const response = await responseJSON.json();
@@ -122,9 +120,9 @@ const Chat = () => {
         },
         body: JSON.stringify({
           message,
-          userId: user?.userId,
           chatId,
         }),
+        credentials: "include",
       });
 
       if (!response.ok) {

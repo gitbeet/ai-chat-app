@@ -9,6 +9,8 @@ import { ThemeProvider } from "./components/theme-provider";
 // import { protectedRouteLoader } from "./lib/utils";
 import { useUserStore } from "./store";
 import NotFound from "./components/pages/not-found";
+import SignUp from "./components/pages/sign-up";
+import SignIn from "./components/pages/sign-in";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +21,14 @@ const router = createBrowserRouter([
         path: "/chat",
         Component: Chat,
         // loader: protectedRouteLoader,
+      },
+      {
+        path: "/sign-in",
+        Component: SignIn,
+      },
+      {
+        path: "/sign-up",
+        Component: SignUp,
       },
       {
         path: "*",

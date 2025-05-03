@@ -3,7 +3,6 @@ import { useUserStore } from "@/store";
 import { ModeToggle } from "../mode-toggle";
 import { Button } from "../ui/button";
 import { Link, useNavigate } from "react-router";
-import SignInButton from "../sign-in-button";
 
 const LayoutNav = () => {
   const { user, setUser } = useUserStore();
@@ -39,7 +38,12 @@ const LayoutNav = () => {
             </Button>
           </div>
         )}
-        <SignInButton text={false} />
+        {!user && (
+          <Link to={"/sign-in"}>
+            <Button variant={"outline"}>Sign in</Button>
+          </Link>
+        )}
+        {/* <SignInButton text={false} /> */}
         <ModeToggle />
       </div>
     </nav>

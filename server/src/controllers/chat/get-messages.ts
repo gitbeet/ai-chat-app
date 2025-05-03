@@ -5,13 +5,9 @@ export const getMessages = async (
   req: Request,
   res: Response
 ): Promise<any> => {
-  const { userId } = req.body;
-  if (!userId) {
-    return res.status(400).json({ error: "User ID is required" });
-  }
   try {
     const chatHistory = await db.query.chats.findMany({
-      where: (chats, { eq }) => (eq as any)(chats.userId, userId),
+      where: (chats, { eq }) => (eq as any)(chats.userId, req.user?.userId),
       orderBy: (chats, { desc }) => [desc(chats.createdAt)],
       with: {
         messages: true,

@@ -1,8 +1,9 @@
 import { db } from "./database";
 import { eq } from "drizzle-orm";
-import { profileInfo, users } from "../db/schema";
+import { profileInfo } from "../db/schema";
 import passport from "passport";
-import { Strategy } from "passport-google-oauth20";
+import googleStrategy from "../config/strategies/google-strategy";
+import localStrategy from "../config/strategies/local-strategy";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -22,49 +23,5 @@ passport.deserializeUser(async (id: string, done) => {
   done(null, user[0]);
 });
 
-passport.use(
-  new Strategy(
-    {
-      // strategy options
-      clientID: process.env.GOOGLE_PLUS_API_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_PLUS_API_CLIENT_SECRET!,
-      callbackURL: "/auth/google/redirect",
-    },
-    // callback function , executed after getting the redirect code
-    async (accessToken, refreshToken, profile, done) => {
-      try {
-        // get the ID and the displayName from the google profile data
-        const { id, displayName } = profile;
-
-        // check for existing user in the database
-        const existingProfileInfo = await db
-          .select()
-          .from(profileInfo)
-          .where(eq(profileInfo.userId, id));
-        // if the user does not exist, crate one
-        if (existingProfileInfo.length === 0) {
-          console.log(
-            `User ${id} does not exist in the database. Adding them...`
-          );
-          const newUserProfileInfo = await db.transaction(async (tx) => {
-            await tx.insert(users).values({ id });
-            const [profile] = await tx
-              .insert(profileInfo)
-              .values({
-                userId: id,
-                name: displayName,
-              })
-              .returning();
-
-            return profile;
-          });
-
-          return done(null, newUserProfileInfo);
-        }
-        done(null, existingProfileInfo[0]);
-      } catch (error) {
-        console.log("Passport callback function error: ", error);
-      }
-    }
-  )
-);
+passport.use(googleStrategy);
+passport.use(localStrategy);

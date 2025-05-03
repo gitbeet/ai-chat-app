@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useUserStore } from "@/store";
 import { Link } from "react-router";
-import SignInButton from "../sign-in-button";
 
 export default function Home() {
   const { user } = useUserStore();
@@ -29,7 +28,17 @@ export default function Home() {
             </Link>
           </div>
         )}
-        <SignInButton />
+        {!user && (
+          <div className="space-x-2">
+            <Link to={"/sign-up"}>
+              <Button>Sign up</Button>
+            </Link>
+            <Link to={"/sign-in"}>
+              <Button variant={"outline"}>Sign in</Button>
+            </Link>
+          </div>
+        )}
+        {/* <SignInButton /> */}
       </main>
     </div>
   );

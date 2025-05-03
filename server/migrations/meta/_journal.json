@@ -8,6 +8,34 @@
       "when": 1746101564373,
       "tag": "0000_sparkling_landau",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1746264001836,
+      "tag": "0001_gray_warpath",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1746264058023,
+      "tag": "0002_nebulous_night_nurse",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1746264090386,
+      "tag": "0003_modern_talkback",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1746264195453,
+      "tag": "0004_colossal_nebula",
+      "breakpoints": true
     }
   ]
 }
