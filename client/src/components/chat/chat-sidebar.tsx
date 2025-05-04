@@ -118,9 +118,9 @@ const ChatSidebar = ({
                       {category}
                     </p>
                     <ul>
-                      {chats.map((chat) => (
+                      {chats.map((chat, i) => (
                         <SidebarChatListElement
-                          key={chat.id}
+                          key={i}
                           chat={chat}
                           currentChatId={currentChatId}
                           deleteChat={deleteChat}
