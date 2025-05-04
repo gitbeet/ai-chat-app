@@ -6,7 +6,7 @@ const Message = ({ message }: { message: FormattedChatMessage }) => {
   return (
     <div>
       {message.role === "user" && (
-        <p className="p-4 w-fit rounded-md shadow-md bg-primary ml-auto text-white">
+        <p className="p-4 w-fit rounded-md shadow-md bg-primary ml-auto text-white max-w-[70%]">
           {message.content}
         </p>
       )}

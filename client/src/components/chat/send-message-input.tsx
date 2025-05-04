@@ -25,7 +25,7 @@ const SendMessageInput = ({ onSubmit, onChange, value, disabled }: Props) => {
   }, []);
 
   return (
-    <div className="fixed w-full left-1/2 -translate-x-1/2 max-w-[800px] px-4  bottom-0 pb-16 pt-4 bg-background">
+    <div className="fixed w-full left-1/2 -translate-x-1/2 max-w-[800px] px-4  bottom-0 pb-8 md:pb-16 pt-4 bg-background">
       <form
         ref={formRef}
         onSubmit={onSubmit}

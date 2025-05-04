@@ -69,7 +69,7 @@ const ChatSidebar = ({
   chats,
   deleteChat,
 }: Props) => {
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
   const toggleSidebar = () => setShow((prev) => !prev);
 
   const categories = groupChatsByTime(chats);
@@ -80,7 +80,7 @@ const ChatSidebar = ({
         show ? "" : "-translate-x-full"
       } transition w-64 border-r border-secondary pt-16 pb-8 h-screen top-0  fixed shadow-md space-y-4 bg-card z-10`}
     >
-      <div className="absolute translate-x-full -right-2 top-16 bg-card border border-secondary p-2 rounded-md shadow flex flex-col gap-2 opacity-50 hover:opacity-100 transition">
+      <div className="absolute translate-x-full -right-2 top-16 bg-card border border-secondary p-2 rounded-md shadow flex flex-col gap-2  transition">
         <Button
           size={"icon"}
           variant={"secondary"}
