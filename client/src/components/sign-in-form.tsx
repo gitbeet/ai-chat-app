@@ -22,6 +22,7 @@ import {
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { useState } from "react";
 
 export function SignInForm({
   className,
@@ -29,6 +30,7 @@ export function SignInForm({
 }: React.ComponentProps<"div">) {
   const { setUser } = useUserStore();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const formSchema = z.object({
     email: z.string().email(),
@@ -47,25 +49,34 @@ export function SignInForm({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const { email, password } = values;
-    const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/auth/local/sign-in`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-        credentials: "include",
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/auth/local/sign-in`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+          credentials: "include",
+        }
+      );
+      const result = await response.json();
+      if (result.error) {
+        toast.error(result.error);
+        setLoading(false);
       }
-    );
-    const result = await response.json();
-    if (result.error) {
-      toast.error(result.error);
-    }
-    if (result.success) {
-      form.reset();
-      setUser({ name: result.user.name, userId: result.user.userId });
-      navigate("/");
+      if (result.success) {
+        setLoading(false);
+        form.reset();
+        setUser({ name: result.user.name, userId: result.user.userId });
+        navigate("/");
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error(error);
+      toast.error("Error while signing in. Please try again.");
     }
   };
 
@@ -151,10 +162,12 @@ export function SignInForm({
                     />
                   </div>
                   <Button
+                    loading={loading}
+                    disabled={loading}
                     type="submit"
                     className="w-full"
                   >
-                    Sign in
+                    {loading ? "Signing in" : "Sign in"}
                   </Button>
                 </div>
                 <div className="text-center text-sm">

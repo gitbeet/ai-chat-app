@@ -55,16 +55,17 @@ createRoot(document.getElementById("root")!).render(
     <ThemeProvider defaultTheme="system">
       <App />
       <Toaster
-        duration={3000}
         position="bottom-center"
         icons={{
           error: <LucideBadgeAlert className="h-5 w-5" />,
         }}
         toastOptions={{
+          duration: 5000,
           classNames: {
             default:
               "!bg-card !border !border-border !text-card-foreground !gap-1.5",
             error: "!text-destructive",
+            success: "!text-teal-500",
             content: "text-base",
           },
         }}

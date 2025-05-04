@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,11 +21,14 @@ import {
   FormMessage,
 } from "./ui/form";
 import { toast } from "sonner";
+import { useState } from "react";
 
 export function SignUpForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const formSchema = z
     .object({
       email: z.string().email(),
@@ -55,23 +58,34 @@ export function SignUpForm({
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const { email, username, password } = values;
-    const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/auth/local/sign-up`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, username, password }),
-        credentials: "include",
+    setLoading(true);
+    try {
+      const { email, username, password } = values;
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/auth/local/sign-up`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, username, password }),
+          credentials: "include",
+        }
+      );
+      const result = await response.json();
+      if (result.error) {
+        setLoading(false);
+        return toast.error(result.error);
       }
-    );
-    const result = await response.json();
-    if (result.error) {
-      return toast.error(result.error);
+      setLoading(false);
+      toast.success("User successfully created", { duration: 2000 });
+      form.reset();
+      navigate("/sign-in");
+    } catch (error) {
+      setLoading(false);
+      console.error(error);
+      toast.error("Error while signing up. Please try again.");
     }
-    form.reset();
   };
 
   return (
@@ -181,10 +195,12 @@ export function SignUpForm({
                     />
                   </div>
                   <Button
+                    loading={loading}
+                    disabled={loading}
                     type="submit"
                     className="w-full"
                   >
-                    Sign in
+                    {loading ? "Signing up" : "Sign up"}
                   </Button>
                 </div>
                 <div className="text-center text-sm">
