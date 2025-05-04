@@ -2,13 +2,16 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { db } from "../database";
 import { profileInfo, users } from "../../db/schema";
 import { eq } from "drizzle-orm";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const strategy = new GoogleStrategy(
   {
     // strategy options
     clientID: process.env.GOOGLE_PLUS_API_CLIENT_ID!,
     clientSecret: process.env.GOOGLE_PLUS_API_CLIENT_SECRET!,
-    callbackURL: "/auth/google/redirect",
+    callbackURL: `${process.env.BASE_URL}${process.env.GOOGLE_CALLBACK_URL}`,
     scope: ["profile", "email"],
   },
   // callback function , executed after getting the redirect code
