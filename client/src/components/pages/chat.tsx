@@ -209,6 +209,7 @@ const Chat = () => {
             userId: user?.userId,
             chatId,
           }),
+          credentials: "include",
         }
       );
 

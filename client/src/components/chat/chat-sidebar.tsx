@@ -2,7 +2,6 @@ import {
   LucideMessageSquarePlus,
   LucideSidebar,
   LucideSidebarClose,
-  LucideTrash2,
 } from "lucide-react";
 import { Button } from "../ui/button";
 import { Chat } from "../pages/chat";
@@ -16,6 +15,7 @@ import {
   getYear,
   isYesterday,
 } from "date-fns";
+import SidebarChatListElement from "./sidebar-chat-list-element";
 
 function groupChatsByTime(chats: Chat[]) {
   const now = new Date();
@@ -119,31 +119,13 @@ const ChatSidebar = ({
                     </p>
                     <ul>
                       {chats.map((chat) => (
-                        <li
-                          onClick={() => setCurrentChatId(chat.id)}
+                        <SidebarChatListElement
                           key={chat.id}
-                          className={` border relative group max-w-full py-2 text-sm mx-4 rounded-md px-2  cursor-pointer ${
-                            chat.id === currentChatId
-                              ? "bg-secondary border-secondary"
-                              : " border-transparent"
-                          }`}
-                        >
-                          <p className="max-w-full truncate">
-                            {chat.messages[0].content}
-                          </p>
-                          <Button
-                            onClick={() => deleteChat(chat.id)}
-                            variant={"destructive"}
-                            size={"iconSm"}
-                            className={` ${
-                              currentChatId === chat.id
-                                ? "opacity-0 group-hover:opacity-100"
-                                : "opacity-0 group-hover:opacity-50"
-                            } hover:opacity-100  transition absolute top-1/2 -translate-y-1/2 right-1`}
-                          >
-                            <LucideTrash2 />
-                          </Button>
-                        </li>
+                          chat={chat}
+                          currentChatId={currentChatId}
+                          deleteChat={deleteChat}
+                          setCurrentChatId={setCurrentChatId}
+                        />
                       ))}
                     </ul>
                   </div>
@@ -152,35 +134,6 @@ const ChatSidebar = ({
           </>
         )}
       </div>
-      {/* {chats.length !== 0 && (
-        <ul className="py-4 overflow-y-auto h-full m-0">
-          {chats.map((chat) => (
-            <li
-              onClick={() => setCurrentChatId(chat.id)}
-              key={chat.id}
-              className={` border relative group max-w-full py-3 text-sm mx-4 rounded-md px-4  cursor-pointer ${
-                chat.id === currentChatId
-                  ? "bg-background  border-secondary "
-                  : " border-transparent"
-              }`}
-            >
-              <p className="max-w-full truncate">{chat.messages[0].content}</p>
-              <Button
-                onClick={() => deleteChat(chat.id)}
-                variant={"secondary"}
-                size={"xs"}
-                className={` ${
-                  currentChatId === chat.id
-                    ? "opacity-0 group-hover:opacity-100"
-                    : "opacity-0 group-hover:opacity-50"
-                } hover:opacity-100  transition absolute top-1/2 -translate-y-1/2 right-1`}
-              >
-                <LucideTrash2 />
-              </Button>
-            </li>
-          ))}
-        </ul>
-      )} */}
     </aside>
   );
 };
