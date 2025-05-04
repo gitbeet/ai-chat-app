@@ -231,7 +231,7 @@ const Chat = () => {
   if (!loadingUser && !user) navigate("/");
 
   const emptyChatJsx = (chats.length === 0 || !currentChatId) && (
-    <div className="grid place-content-center">
+    <div className="flex-1 text-center w-full  grid place-content-center px-4">
       <h1>Hey, how can I help you today?</h1>
     </div>
   );
@@ -239,7 +239,7 @@ const Chat = () => {
   const currentChat = chats.find((chat) => chat.id === currentChatId);
 
   return (
-    <div className="flex h-[85dvh]">
+    <>
       <ChatSidebar
         currentChatId={currentChatId}
         setCurrentChatId={setCurrentChatId}
@@ -247,22 +247,24 @@ const Chat = () => {
         deleteChat={deleteChat}
       />
       {!loading && (
-        <main className="grid grid-rows-[1fr_auto] max-w-[800px] mx-auto gap-8  pt-12 min-h-full  w-full">
+        <>
           {emptyChatJsx}
-          <Messages
-            chat={currentChat}
-            loading={loading}
-            thinking={thinking}
-          />
+          {currentChatId && (
+            <Messages
+              chat={currentChat}
+              loading={loading}
+              thinking={thinking}
+            />
+          )}
           <SendMessageInput
             disabled={message.length === 0}
             value={message}
             onSubmit={sendMessage}
             onChange={(e) => setMessage(e.target.value)}
           />
-        </main>
+        </>
       )}
-    </div>
+    </>
   );
 };
 

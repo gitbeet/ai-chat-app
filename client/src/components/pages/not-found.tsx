@@ -8,7 +8,9 @@ const NotFound = () => {
   return (
     <main className="flex flex-col items-center justify-center gap-8 h-[60dvh]">
       <h1 className="text-5xl font-black">404</h1>
-      <p>Oops! The page you're looking for doesn't exist or has been moved.</p>
+      <p className="text-center">
+        Oops! The page you're looking for doesn't exist or has been moved.
+      </p>
       <div className="space-x-2">
         <Button
           className="w-fit"

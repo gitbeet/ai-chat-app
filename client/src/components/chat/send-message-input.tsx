@@ -25,26 +25,28 @@ const SendMessageInput = ({ onSubmit, onChange, value, disabled }: Props) => {
   }, []);
 
   return (
-    <form
-      ref={formRef}
-      onSubmit={onSubmit}
-      className="relative"
-    >
-      <AutoResizeTextArea
-        rows={1}
-        value={value}
-        onChange={onChange}
-        placeholder="Ask anything!"
-        className="w-full resize-none scrollbar-none pr-14"
-      />
-      <Button
-        disabled={disabled}
-        type="submit"
-        className="absolute right-3 top-3"
+    <div className="fixed w-full left-1/2 -translate-x-1/2 max-w-[800px] px-4  bottom-0 pb-16 pt-4 bg-background">
+      <form
+        ref={formRef}
+        onSubmit={onSubmit}
+        className="relative"
       >
-        <LucideSend />
-      </Button>
-    </form>
+        <AutoResizeTextArea
+          rows={1}
+          value={value}
+          onChange={onChange}
+          placeholder="Ask anything!"
+          className="w-full resize-none scrollbar-none pr-16"
+        />
+        <Button
+          disabled={disabled}
+          type="submit"
+          className="absolute right-3 top-3.5"
+        >
+          <LucideSend />
+        </Button>
+      </form>
+    </div>
   );
 };
 

@@ -22,19 +22,18 @@ const Messages = ({ loading, thinking, chat }: Props) => {
   }, [chat?.id, loading, thinking]);
 
   useEffect(() => {
-    const container = chatContainerRef.current;
     function handleScroll() {
-      if (!container) return;
       const isButtonVisible =
-        container.scrollHeight - container.scrollTop - container.clientHeight >
+        document.documentElement.scrollHeight -
+          window.scrollY -
+          window.innerHeight >
         250;
       setShowScrollToBottom(isButtonVisible);
     }
 
-    container?.addEventListener("scroll", handleScroll);
-    return () => container?.removeEventListener("scroll", handleScroll);
-    // it gets a warning but it works
-  }, [chatContainerRef.current]);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const scrollDown = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -42,7 +41,7 @@ const Messages = ({ loading, thinking, chat }: Props) => {
   return (
     <div
       ref={chatContainerRef}
-      className="overflow-auto py-4 space-y-8 scrollbar-none"
+      className="w-full space-y-8 max-w-[800px] mx-auto px-4"
     >
       <Button
         size={"icon"}
@@ -50,7 +49,7 @@ const Messages = ({ loading, thinking, chat }: Props) => {
         onClick={scrollDown}
         className={` ${
           showScrollToBottom ? "opacity-100" : "opacity-0"
-        } sticky top-full -translate-y-full left-1/2 -translate-x-1/2`}
+        } fixed bottom-24 -translate-y-full left-1/2 -translate-x-1/2`}
       >
         <LucideArrowDown />
       </Button>

@@ -7,7 +7,7 @@ const SignIn = () => {
   const navigate = useNavigate();
   if (user) navigate("/");
   return (
-    <main className="mt-16 max-w-[450px] mx-auto">
+    <main className="mt-16 max-w-[450px] mx-auto px-4">
       <SignInForm />
     </main>
   );

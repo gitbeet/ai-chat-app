@@ -17,7 +17,7 @@ const LayoutNav = () => {
       .finally(() => navigate("/"));
   };
   return (
-    <nav className="px-4 py-4 max-w-[1200px] flex items-center justify-between mx-auto">
+    <nav className="px-4 py-4 max-w-[1200px] flex items-center justify-between mx-auto w-full sticky top-0 bg-background ">
       <Link to={"/"}>
         <LucideBotMessageSquare size={24} />
       </Link>
@@ -40,7 +40,6 @@ const LayoutNav = () => {
             <Button variant={"outline"}>Sign in</Button>
           </Link>
         )}
-        {/* <SignInButton text={false} /> */}
         <ModeToggle />
       </div>
     </nav>
