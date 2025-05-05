@@ -33,7 +33,9 @@ export const chat = async (req: Request, res: Response): Promise<any> => {
 
     // if chat does not exist
     if (!existingChat) {
-      await db.insert(chats).values({ id: chatId, userId });
+      await db
+        .insert(chats)
+        .values({ id: chatId, userId, name: message.slice(0, 30) });
     }
 
     // fetch user's past messages to pass as a context

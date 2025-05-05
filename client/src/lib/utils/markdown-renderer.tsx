@@ -2,7 +2,7 @@
 import { ReactRenderer } from "marked-react";
 import hljs from "./hljs-init"; // or wherever your HLJS config lives
 import CodeBlock from "@/components/chat/code-block";
-import "../highlight.css";
+import "../../highlight.css";
 import {
   TableBody,
   TableCell,

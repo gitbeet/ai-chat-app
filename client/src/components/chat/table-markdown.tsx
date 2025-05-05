@@ -4,7 +4,7 @@ import { Button } from "../ui/button";
 import { Table } from "../ui/table";
 import { useState } from "react";
 import { toast } from "sonner";
-import { htmlTableToMarkdown } from "@/lib/table-to-markdown";
+import { htmlTableToMarkdown } from "@/lib/utils/table-to-markdown";
 
 const TableMarkdown = ({ children }: { children: ReactNode[] }) => {
   const [copied, setCopied] = useState(false);
@@ -21,13 +21,12 @@ const TableMarkdown = ({ children }: { children: ReactNode[] }) => {
     }
   };
   return (
-    <Table className="my-4 relative group">
-      {children}
+    <div className="relative group my-4">
       <Button
         onClick={handleCopy}
         size={"icon"}
         variant={"ghost"}
-        className="absolute top-1 right-1 opacity-0 group-hover:opacity-100"
+        className="absolute z-10 top-1 right-1 opacity-0 group-hover:opacity-100"
       >
         {copied ? (
           <LucideCheck className="w-4 h-4 text-green-500" />
@@ -35,7 +34,8 @@ const TableMarkdown = ({ children }: { children: ReactNode[] }) => {
           <LucideCopy className="w-4 h-4" />
         )}
       </Button>
-    </Table>
+      <Table>{children}</Table>
+    </div>
   );
 };
 

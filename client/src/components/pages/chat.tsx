@@ -14,13 +14,15 @@ export type FormattedChatMessage = { role: "user" | "ai"; content: string };
 export type Chat = {
   id: string;
   messages: FormattedChatMessage[];
-  createdAt: Date;
+  name: string;
+  createdAt: string;
 };
 
 type APIResponseChat = {
   id: string;
   messages: APIResponseChatMessage[];
-  createdAt: Date;
+  name: string;
+  createdAt: string;
 };
 
 const Chat = () => {
@@ -102,23 +104,18 @@ const Chat = () => {
           );
         } else {
           return [
+            ...prev,
             {
               id: chatId,
-              createdAt: new Date(),
+              name: message.slice(0, 30),
+              createdAt: new Date().toISOString(),
               messages: [newMessage],
             },
-            ...prev,
           ];
         }
       });
 
-      // set the id
-      if (!currentChatId) {
-        setCurrentChatId(chatId);
-      }
-
-      // reset input
-      setMessage("");
+      setCurrentChatId(chatId);
 
       const response = await fetch(`${import.meta.env.VITE_API_URL}/chat`, {
         method: "POST",
@@ -136,6 +133,7 @@ const Chat = () => {
         return toast.error("Error getting the response");
       }
 
+      setMessage("");
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       const aiMessage: FormattedChatMessage = { role: "ai", content: "" };
@@ -222,6 +220,32 @@ const Chat = () => {
     }
   };
 
+  const renameChat = async (chatId: string, name: string) => {
+    if (!user?.userId) {
+      toast.error("Client error");
+      return;
+    }
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/chat/rename-chat`,
+
+      {
+        credentials: "include",
+        method: "PUT",
+        body: JSON.stringify({ userId: user.userId, chatId, name }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      toast.error("Client error");
+      return;
+    }
+    return setChats((prev) =>
+      prev.map((chat) => (chat.id === chatId ? { ...chat, name } : chat))
+    );
+  };
+
   useEffect(() => {
     if (!user) return;
     getMessages();
@@ -244,6 +268,7 @@ const Chat = () => {
         currentChatId={currentChatId}
         setCurrentChatId={setCurrentChatId}
         chats={chats}
+        renameChat={renameChat}
         deleteChat={deleteChat}
       />
       {!loading && (

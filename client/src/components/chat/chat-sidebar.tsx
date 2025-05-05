@@ -6,7 +6,6 @@ import {
 import { Button } from "../ui/button";
 import { Chat } from "../pages/chat";
 import { useState } from "react";
-
 import {
   isToday,
   isThisWeek,
@@ -31,7 +30,6 @@ function groupChatsByTime(chats: Chat[]) {
 
   chats.forEach((chat) => {
     const date = chat.createdAt;
-
     if (isToday(date)) {
       categories.Today.push(chat);
     } else if (isYesterday(date)) {
@@ -43,7 +41,7 @@ function groupChatsByTime(chats: Chat[]) {
     } else {
       const year = getYear(date);
       if (year === currentYear) {
-        const monthName = format(date, "LLLL"); // e.g. 'January'
+        const monthName = format(date, "LLLL");
         if (!categories[monthName]) categories[monthName] = [];
         categories[monthName].push(chat);
       } else {
@@ -53,6 +51,13 @@ function groupChatsByTime(chats: Chat[]) {
     }
   });
 
+  for (const category in categories) {
+    categories[category].sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+  }
+
   return categories;
 }
 
@@ -60,6 +65,7 @@ interface Props {
   currentChatId: string | null;
   setCurrentChatId: React.Dispatch<React.SetStateAction<string | null>>;
   chats: Chat[];
+  renameChat: (chatId: string, name: string) => Promise<void>;
   deleteChat: (chatId: string) => Promise<void>;
 }
 
@@ -67,6 +73,7 @@ const ChatSidebar = ({
   currentChatId,
   setCurrentChatId,
   chats,
+  renameChat,
   deleteChat,
 }: Props) => {
   const [show, setShow] = useState(true);
@@ -118,12 +125,13 @@ const ChatSidebar = ({
                       {category}
                     </p>
                     <ul>
-                      {chats.map((chat, i) => (
+                      {chats.map((chat) => (
                         <SidebarChatListElement
-                          key={i}
+                          key={chat.id}
                           chat={chat}
                           currentChatId={currentChatId}
                           deleteChat={deleteChat}
+                          renameChat={renameChat}
                           setCurrentChatId={setCurrentChatId}
                         />
                       ))}

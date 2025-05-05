@@ -21,6 +21,7 @@ export const profileInfo = pgTable("profileInfo", {
 
 export const chats = pgTable("chats", {
   id: uuid("id").primaryKey(),
+  name: text("name").notNull(),
   userId: text("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),

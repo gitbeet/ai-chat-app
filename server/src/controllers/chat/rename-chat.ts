@@ -3,11 +3,10 @@ import { db } from "../../config/database";
 import { chats } from "../../db/schema";
 import { eq } from "drizzle-orm";
 
-export const deleteChat = async (req: Request, res: Response): Promise<any> => {
+export const renameChat = async (req: Request, res: Response): Promise<any> => {
   // get userid from passport (req.user)
-
-  const { userId, chatId } = req.body;
-  if (!userId || !chatId) {
+  const { userId, chatId, name } = req.body;
+  if (!userId || !chatId || !name) {
     res.status(400).json({ error: "Bad request" });
   }
   try {
@@ -18,7 +17,8 @@ export const deleteChat = async (req: Request, res: Response): Promise<any> => {
     if (!chat) {
       return res.status(404).json({ error: "No chat found" });
     }
-    await db.delete(chats).where(eq(chats.id, chatId));
+    await db.update(chats).set({ name }).where(eq(chats.id, chatId));
+    res.status(200).json({ message: "Chat successfully updated." });
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
