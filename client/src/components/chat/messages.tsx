@@ -47,7 +47,7 @@ const Messages = ({ loading, thinking, chat }: Props) => {
     <>
       <Button
         size={"icon"}
-        variant={"outline"}
+        variant={"secondary"}
         onClick={scrollDown}
         className={` ${
           showScrollToBottom ? "opacity-100" : "opacity-0"

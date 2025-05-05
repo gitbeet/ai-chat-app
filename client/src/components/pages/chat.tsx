@@ -68,7 +68,7 @@ const Chat = () => {
         formattedChats.push(formattedChat);
       });
       setChats(formattedChats);
-      setCurrentChatId(formattedChats[0].id);
+      // setCurrentChatId(formattedChats[0].id);
     } catch (e) {
       console.error(e);
       toast.error("Error while getting the messages");

@@ -8,15 +8,17 @@ export default function Home() {
 
   return (
     <div className="grid items-center justify-items-center min-h-[80dvh] p-8  gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] items-center justify-center ">
-        <h1 className="text-5xl font-black text-center">
-          Ask Anything. Get Answers Instantly.
-        </h1>
-        <h3 className="text-center">
-          Experience next-gen AI conversations—fast, accurate, and always
-          learning.
-        </h3>
-
+      <main className="flex flex-col gap-8 items-center justify-center ">
+        <div className="space-y-4">
+          <h1 className="text-4xl md:text-5xl font-black text-center">
+            Ask anything.
+            <br className="lg:hidden" /> Get answers Instantly.
+          </h1>
+          <h3 className="text-center text-foreground/80">
+            Experience next-gen AI conversations—fast, accurate, and always
+            learning.
+          </h3>
+        </div>
         {user && (
           <div className="grid place-content-center gap-4">
             <Link to={"/chat"}>
