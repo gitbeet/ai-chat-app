@@ -68,7 +68,11 @@ export function SignUpForm({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ email, username, password }),
+          body: JSON.stringify({
+            email: email.toLowerCase(),
+            username,
+            password,
+          }),
           credentials: "include",
         }
       );

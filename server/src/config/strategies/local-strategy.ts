@@ -11,7 +11,7 @@ const strategy = new PassportLocalStrategy(
   async (email, password, done) => {
     try {
       const existingUser = await db.query.users.findFirst({
-        where: (model, { eq }) => (eq as any)(model.email, email),
+        where: (model, { eq }) => (eq as any)(model.email, email.toLowerCase()),
       });
 
       // if no user found

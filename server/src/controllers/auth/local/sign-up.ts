@@ -11,9 +11,11 @@ const signUp = async (req: Request, res: Response) => {
     if (!req.body.email || !req.body.password || !req.body.username) {
       res.status(400).send({ error: "Bad request" });
     }
-    // const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+    const email = req.body.email.toLowerCase();
+
     const existingUser = await db.query.users.findFirst({
-      where: (model, { eq }) => (eq as any)(model.email, req.body.email),
+      where: (model, { eq }) => (eq as any)(model.email, email),
     });
 
     if (existingUser) {
@@ -23,7 +25,7 @@ const signUp = async (req: Request, res: Response) => {
 
     if (!existingUser) {
       console.log(
-        `User with email ${req.body.email} does not exist in the database. Adding them...`
+        `User with email ${email} does not exist in the database. Adding them...`
       );
 
       // generate uuid for user id
@@ -35,7 +37,7 @@ const signUp = async (req: Request, res: Response) => {
       await db.transaction(async (tx) => {
         await tx.insert(users).values({
           id: userId,
-          email: req.body.email,
+          email,
           password: hashedPassword,
         });
         await tx
@@ -46,12 +48,10 @@ const signUp = async (req: Request, res: Response) => {
           })
           .returning();
       });
-      res
-        .status(201)
-        .json({
-          success: true,
-          message: `User ${req.body.username} created successfully`,
-        });
+      res.status(201).json({
+        success: true,
+        message: `User ${req.body.username} created successfully`,
+      });
     }
   } catch (error) {
     res.status(500).send({ error: `Server error: ${error}` });

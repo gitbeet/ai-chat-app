@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { LucideEdit, LucideMoreHorizontal, LucideTrash2 } from "lucide-react";
 import { Button } from "../ui/button";
 import { Chat } from "../pages/chat";
@@ -14,6 +14,7 @@ import {
   AlertDialogTitle,
 } from "../ui/alert-dialog";
 import { Input } from "../ui/input";
+import { useOutsideClick } from "@/hooks/useOutsideClick";
 
 interface Props {
   currentChatId: string | null;
@@ -33,7 +34,20 @@ const SidebarChatListElement = ({
   const [showDialog, setShowDialog] = useState(false);
   const [renaming, setRenaming] = useState(false);
   const [name, setName] = useState(chat.name);
-  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleRenameChat = () => {
+    if (name.length === 0) return;
+    renameChat(chat.id, name)
+      .catch(() => setName(chat.name))
+      .finally(() => {
+        setRenaming(false);
+      });
+  };
+
+  const inputRef = useOutsideClick<HTMLInputElement>(() => {
+    handleRenameChat();
+  });
+
   return (
     <li
       onClick={() => setCurrentChatId(chat.id)}
@@ -62,12 +76,7 @@ const SidebarChatListElement = ({
               setName(chat.name);
             }
             if (e.key === "Enter") {
-              if (name.length === 0) return;
-              renameChat(chat.id, name)
-                .catch(() => setName(chat.name))
-                .finally(() => {
-                  setRenaming(false);
-                });
+              handleRenameChat();
             }
           }}
           autoFocus

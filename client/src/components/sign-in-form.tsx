@@ -58,7 +58,7 @@ export function SignInForm({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ email, password }),
+          body: JSON.stringify({ email: email.toLowerCase(), password }),
           credentials: "include",
         }
       );

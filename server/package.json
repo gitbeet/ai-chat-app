@@ -6,6 +6,7 @@
     "dev": "tsc --noEmit & tsx --watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
+    "db:seed": "tsc --noEmit & tsx src/utils/seed.ts",
     "db:studio": "npx drizzle-kit studio"
   },
   "keywords": [],

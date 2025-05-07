@@ -20,23 +20,22 @@ function groupChatsByTime(chats: Chat[]) {
   const now = new Date();
   const currentYear = getYear(now);
 
-  const categories: Record<string, Chat[]> = {
-    Today: [],
-    "Yesterday": [],
-    "This Week": [],
-    "Last Week": [],
-    "This Month": [],
-  };
+  const categories: Record<string, Chat[]> = {};
 
+  // sort the chats into the categories
   chats.forEach((chat) => {
     const date = chat.createdAt;
     if (isToday(date)) {
+      if (!categories["Today"]) categories["Today"] = [];
       categories.Today.push(chat);
     } else if (isYesterday(date)) {
+      if (!categories["Yesterday"]) categories["Yesterday"] = [];
       categories.Yesterday.push(chat);
     } else if (isThisWeek(date, { weekStartsOn: 1 })) {
+      if (!categories["This Week"]) categories["This Week"] = [];
       categories["This Week"].push(chat);
     } else if (isThisMonth(date)) {
+      if (!categories["This Month"]) categories["This Month"] = [];
       categories["This Month"].push(chat);
     } else {
       const year = getYear(date);
@@ -51,6 +50,7 @@ function groupChatsByTime(chats: Chat[]) {
     }
   });
 
+  // order the chats in each category (they are still unsorted, just being put into categories)
   for (const category in categories) {
     categories[category].sort(
       (a, b) =>
@@ -58,7 +58,19 @@ function groupChatsByTime(chats: Chat[]) {
     );
   }
 
-  return categories;
+  // order the categories
+  const final = Object.entries(categories).map(([category, items]) => ({
+    label: category,
+    chats: items,
+  }));
+
+  final.sort(
+    (a, b) =>
+      new Date(b.chats[0]?.createdAt).getTime() -
+      new Date(a.chats[0]?.createdAt).getTime()
+  );
+
+  return final;
 }
 
 interface Props {
@@ -80,12 +92,13 @@ const ChatSidebar = ({
   const toggleSidebar = () => setShow((prev) => !prev);
 
   const categories = groupChatsByTime(chats);
+  console.log(categories);
 
   return (
     <aside
       className={` ${
         show ? "" : "-translate-x-full"
-      } transition w-64 border-r border-secondary pt-16 pb-8 h-screen top-0  fixed shadow-md space-y-4 bg-card z-10`}
+      } transition w-64 border-r border-secondary py-16 pb-8 h-screen top-0 fixed shadow-md space-y-4 bg-card z-20`}
     >
       <div className="absolute translate-x-full -right-2 top-16 bg-card border border-secondary p-2 rounded-md shadow flex flex-col gap-2  transition">
         <Button
@@ -114,18 +127,18 @@ const ChatSidebar = ({
         <LucideMessageSquarePlus className="!h-5 !w-5" />
         New chat
       </Button>
-      <div className="max-h-2/3  overflow-auto space-y-4">
+      <div className="max-h-[90%] overflow-y-auto space-y-4 scrollbar-thin">
         {chats.length !== 0 && (
           <>
-            {Object.entries(categories).map(
-              ([category, chats]) =>
-                chats.length !== 0 && (
-                  <div key={category}>
+            {categories.map(
+              (category) =>
+                category.chats.length !== 0 && (
+                  <div key={category.label}>
                     <p className="text-xs pl-6 mb-2 text-card-foreground/50">
-                      {category}
+                      {category.label}
                     </p>
                     <ul>
-                      {chats.map((chat) => (
+                      {category.chats.map((chat) => (
                         <SidebarChatListElement
                           key={chat.id}
                           chat={chat}
