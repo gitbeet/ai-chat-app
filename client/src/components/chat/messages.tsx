@@ -9,9 +9,10 @@ interface Props {
   loading: boolean;
   thinking: boolean;
   chat: Chat | undefined;
+  streamingResponse: boolean;
 }
 
-const Messages = ({ loading, thinking, chat }: Props) => {
+const Messages = ({ loading, thinking, chat, streamingResponse }: Props) => {
   const [showScrollToBottom, setShowScrollToBottom] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -66,6 +67,7 @@ const Messages = ({ loading, thinking, chat }: Props) => {
               <Message
                 key={i}
                 message={m}
+                streamingResponse={streamingResponse}
               />
             );
           })}

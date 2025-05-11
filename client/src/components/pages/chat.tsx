@@ -37,7 +37,7 @@ const Chat = () => {
   const [loading, setLoading] = useState(true);
   // for when the AI is thinking of a response
   const [thinking, setThinking] = useState(false);
-
+  const [streamingResponse, setStreamingResponse] = useState(false);
   const getMessages = useCallback(async () => {
     setLoading(true);
     try {
@@ -139,7 +139,7 @@ const Chat = () => {
       const aiMessage: FormattedChatMessage = { role: "ai", content: "" };
 
       setThinking(false);
-
+      setStreamingResponse(true);
       // append an empty message
       setChats((prev) =>
         prev.map((chat) =>
@@ -190,6 +190,8 @@ const Chat = () => {
             : chat
         )
       );
+    } finally {
+      setStreamingResponse(false);
     }
   };
 
@@ -279,6 +281,7 @@ const Chat = () => {
               chat={currentChat}
               loading={loading}
               thinking={thinking}
+              streamingResponse={streamingResponse}
             />
           )}
           <SendMessageInput

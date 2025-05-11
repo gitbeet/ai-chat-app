@@ -1,8 +1,15 @@
 import { FormattedChatMessage } from "../pages/chat";
 import TextFormatter from "../text-formatter";
+import CopyButton from "../ui/copy-button";
 // import { LucideBot } from "lucide-react";
 
-const Message = ({ message }: { message: FormattedChatMessage }) => {
+const Message = ({
+  message,
+  streamingResponse,
+}: {
+  message: FormattedChatMessage;
+  streamingResponse: boolean;
+}) => {
   return (
     <div>
       {message.role === "user" && (
@@ -10,7 +17,17 @@ const Message = ({ message }: { message: FormattedChatMessage }) => {
           {message.content}
         </p>
       )}
-      {message.role === "ai" && <TextFormatter text={message.content} />}
+      {message.role === "ai" && (
+        <div className="group">
+          <TextFormatter text={message.content} />
+          {!streamingResponse && (
+            <CopyButton
+              text={message.content}
+              className={`opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto mt-2 transition`}
+            />
+          )}
+        </div>
+      )}
     </div>
   );
 };
