@@ -64,7 +64,7 @@ export const chat = async (req: Request, res: Response): Promise<any> => {
     res.setHeader("Connection", "keep-alive");
 
     const response = await openAi.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-4.1-nano-2025-04-14",
       messages: conversation,
       stream: true,
     });

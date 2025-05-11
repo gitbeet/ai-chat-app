@@ -23,7 +23,11 @@ const Message = ({
           {!streamingResponse && (
             <CopyButton
               text={message.content}
-              className={`opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto mt-2 transition`}
+              className={` ${
+                streamingResponse
+                  ? "opacity-0 pointer-events-none"
+                  : "opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto"
+              }  mt-2 transition`}
             />
           )}
         </div>
