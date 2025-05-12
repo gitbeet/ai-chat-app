@@ -2,7 +2,7 @@
 
 Chat application that allows users to interact with a smart assistant in real-time.
 
-[Click here](https://ai-chat-app-client-production.up.railway.app/) to go to the project page.
+<a href="https://ai-chat-app-client-production.up.railway.app/" target="_blank">Click here</a> to go to the project page.
 
 ---
 
@@ -64,31 +64,32 @@ This project is a personal AI chat app built to practice frontend/backend integr
 
 **Chat interface**
 
-<div style="display: flex; gap: 8px; align-items: center;">
+<div style="display: flex; flex-wrap: wrap; gap: 8px;">
   <div style="text-align: center;">
     <a href="./screenshots/desktop-chat-page__dark-mode.webp" target="_blank">
-      <img src="./screenshots/desktop--chat-page__dark-mode__thumbnail.webp" alt="Dark mode" />
+      <img src="./screenshots/desktop--chat-page__dark-mode__thumbnail.webp" alt="Dark mode" width="200px"/>
     </a>
-    <div><em>Dark mode (desktop)</em></div>
+    <div><em>Desktop (dark mode)</em></div>
   </div>
 
   <div style="text-align: center;">
     <a href="./screenshots/desktop-chat-page__light-mode.webp" target="_blank">
-      <img src="./screenshots/desktop--chat-page__light-mode__thumbnail.webp" alt="Light mode"/>
+      <img src="./screenshots/desktop--chat-page__light-mode__thumbnail.webp" alt="Light mode" width="200px"/>
     </a>
-    <div><em>Light mode (desktop)</em></div>
+    <div><em>Desktop (light mode)</em></div>
   </div>
-    <div style="text-align: center;">
+
+  <div style="text-align: center;">
     <a href="./screenshots/mobile-chat-page__dark-mode.webp" target="_blank">
-      <img src="./screenshots/mobile--chat-page__dark-mode__thumbnail.webp" alt="Dark mode" />
+      <img src="./screenshots/mobile--chat-page__dark-mode__thumbnail.webp" alt="Dark mode" width="200px"/>
     </a>
-    <div><em>Dark mode (mobile)</em></div>
+    <div><em>Mobile (dark mode)</em></div>
   </div>
 
   <div style="text-align: center;">
     <a href="./screenshots/mobile-chat-page__light-mode.webp" target="_blank">
-      <img src="./screenshots/mobile--chat-page__light-mode__thumbnail.webp" alt="Light mode"/>
+      <img src="./screenshots/mobile--chat-page__light-mode__thumbnail.webp" alt="Light mode" width="200px"/>
     </a>
-    <div><em>Light mode (mobile)</em></div>
+    <div><em>Mobile (light mode)</em></div>
   </div>
 </div>
