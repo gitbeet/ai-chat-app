@@ -32,7 +32,8 @@ const signUp = async (req: Request, res: Response) => {
       // checks for the password
       const result = validatePassword(req.body.password);
       if (result.error) {
-        return res.status(400).json({ error: result.error });
+        res.status(400).json({ error: result.error });
+        return;
       }
 
       // generate uuid for user id
