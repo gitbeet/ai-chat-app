@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 
 import { v7 as uuid } from "uuid";
 import { profileInfo, users } from "../../../db/schema";
+import { validatePassword } from "../../../utils/validatePassword";
 
 const signUp = async (req: Request, res: Response) => {
   try {
@@ -27,6 +28,12 @@ const signUp = async (req: Request, res: Response) => {
       console.log(
         `User with email ${email} does not exist in the database. Adding them...`
       );
+
+      // checks for the password
+      const result = validatePassword(req.body.password);
+      if (result.error) {
+        return res.status(400).json({ error: result.error });
+      }
 
       // generate uuid for user id
       const userId = uuid();
